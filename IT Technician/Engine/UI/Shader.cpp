@@ -1,11 +1,6 @@
 #include "Shader.h"
 #include <glad/glad.h>
-
-Shader::~Shader() {
-	if (this->_ID != -1) {
-		glDeleteProgram(this->_ID);
-	}
-}
+#include <glm/gtc/type_ptr.hpp>
 
 bool Shader::Compile(const char* vertexDefinition, const char* fragmentDefinition, const char* geometryDefinition)
 {
@@ -41,9 +36,27 @@ Shader& Shader::Use() {
 	return *this;
 }
 
+void Shader::SetInteger(const char* name, const int value) {
+	glUniform1i(glGetUniformLocation(this->_ID, name), value);
+}
+
+void Shader::SetVector3f(const char* name, const glm::vec3& value){
+	glUniform3f(glGetUniformLocation(this->_ID, name), value.x, value.y, value.z);
+}
+
+void Shader::SetMatrix4(const char* name, const glm::mat4& matrix){
+	glUniformMatrix4fv(glGetUniformLocation(this->_ID, name), 1, false, glm::value_ptr(matrix));
+}
+
+void Shader::Clear() {
+	if (this->_ID != -1) {
+		glDeleteProgram(this->_ID);
+	}
+}
+
 unsigned int Shader::_BuildShader(unsigned int type, const char* definition) const
 {
-	if (definition == nullptr || definition == "") {
+	if (definition == nullptr || strlen(definition) == 0) {
 		return 0;
 	}
 

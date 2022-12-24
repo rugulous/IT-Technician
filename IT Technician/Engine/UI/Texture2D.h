@@ -18,10 +18,10 @@ struct TextureFilter {
 class Texture2D {
 public:
 	explicit Texture2D(bool alpha = false);
-	~Texture2D();
 
 	void Load(unsigned int width, unsigned int height, unsigned const char* data);
 	void Bind() const;
+	void Clear();
 
 private:
 	unsigned int _ID = 0;

@@ -69,11 +69,20 @@ Texture2D ResourceManager::LoadTexture(std::string name, const char* file, bool 
 
 Texture2D ResourceManager::GetTexture(std::string name)
 {
-	return Texture2D();
+	return _textures[name];
 }
 
 void ResourceManager::Clear() {
+	for (auto iter : _shaders) {
+		iter.second.Clear();
+	}
+
 	_shaders.clear();
+
+	for (auto iter : _textures) {
+		iter.second.Clear();
+	}
+	
 	_textures.clear();
 }
 

@@ -12,10 +12,8 @@ Texture2D::Texture2D(bool alpha) {
 
 	this->_filter.min = GL_LINEAR;
 	this->_filter.max = GL_LINEAR;
-}
 
-Texture2D::~Texture2D() {
-	glDeleteTextures(1, &this->_ID);
+	glGenTextures(1, &this->_ID);
 }
 
 void Texture2D::Load(unsigned int width, unsigned int height, unsigned const char* data) {
@@ -36,4 +34,8 @@ void Texture2D::Load(unsigned int width, unsigned int height, unsigned const cha
 void Texture2D::Bind() const
 {
 	glBindTexture(GL_TEXTURE_2D, this->_ID);
+}
+
+void Texture2D::Clear() {
+	glDeleteTextures(1, &this->_ID);
 }

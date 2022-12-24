@@ -1,11 +1,17 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 class Shader {
 public:
-	~Shader();
-
 	bool Compile(const char* vertexDefinition, const char* fragmentDefinition, const char* geometryDefinition = "");
 	Shader& Use();
+
+	void SetInteger(const char* name, const int value);
+	void SetVector3f(const char* name, const glm::vec3& value);
+	void SetMatrix4(const char* name, const glm::mat4& matrix);
+
+	void Clear();
 
 private:
 	int _ID = -1;
