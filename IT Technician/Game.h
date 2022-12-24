@@ -9,4 +9,6 @@ public:
 
 	void Init();
 	void ProcessInput();
+	void Update();
+	void Render();
 };

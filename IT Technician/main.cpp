@@ -61,6 +61,8 @@ int main() {
 		glfwPollEvents();
 
 		game.ProcessInput();
+		game.Update();
+		game.Render();
 
 		glfwSwapBuffers(window);
 	}

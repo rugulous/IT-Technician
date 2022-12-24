@@ -36,6 +36,11 @@ bool Shader::Compile(const char* vertexDefinition, const char* fragmentDefinitio
 	return success;
 }
 
+Shader& Shader::Use() {
+	glUseProgram(this->_ID);
+	return *this;
+}
+
 unsigned int Shader::_BuildShader(unsigned int type, const char* definition) const
 {
 	if (definition == nullptr || definition == "") {

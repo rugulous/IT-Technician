@@ -5,6 +5,7 @@ public:
 	~Shader();
 
 	bool Compile(const char* vertexDefinition, const char* fragmentDefinition, const char* geometryDefinition = "");
+	Shader& Use();
 
 private:
 	int _ID = -1;

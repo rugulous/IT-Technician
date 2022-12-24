@@ -2,8 +2,10 @@
 
 #include <fstream>
 #include <sstream>
+#include "../stb_image.h"
 
 std::map<std::string, Shader> ResourceManager::_shaders;
+std::map<std::string, Texture2D> ResourceManager::_textures;
 
 std::string ResourceManager::ReadFile(const char* filePath) {
 	std::string data = "";
@@ -19,7 +21,7 @@ std::string ResourceManager::ReadFile(const char* filePath) {
 	return data;
 }
 
-Shader* ResourceManager::LoadShader(std::string name, const char* filePath, const char* vertexPath, const char* fragmentPath, const char* geometryPath)
+Shader ResourceManager::LoadShader(std::string name, const char* filePath, const char* vertexPath, const char* fragmentPath, const char* geometryPath)
 {
 	char end = filePath[strlen(filePath) - 1];
 	if (end != '\\' && end != '/') {
@@ -39,12 +41,10 @@ Shader* ResourceManager::LoadShader(std::string name, const char* filePath, cons
 	}
 
 	Shader shader;
-	if (!shader.Compile(vertex.c_str(), fragment.c_str(), geometry.c_str())) {
-		return nullptr;
-	}
-
+	shader.Compile(vertex.c_str(), fragment.c_str(), geometry.c_str());
+	
 	_shaders[name] = shader;
-	return &_shaders[name];
+	return shader;
 }
 
 Shader ResourceManager::GetShader(std::string name)
@@ -52,8 +52,29 @@ Shader ResourceManager::GetShader(std::string name)
 	return _shaders[name];
 }
 
+Texture2D ResourceManager::LoadTexture(std::string name, const char* file, bool alpha)
+{
+	Texture2D texture(alpha);
+	int width;
+	int height;
+	int channels;
+
+	unsigned char* data = stbi_load(file, &width, &height, &channels, 0);
+	texture.Load(width, height, data);
+	stbi_image_free(data);
+
+	_textures[name] = texture;
+	return texture;
+}
+
+Texture2D ResourceManager::GetTexture(std::string name)
+{
+	return Texture2D();
+}
+
 void ResourceManager::Clear() {
 	_shaders.clear();
+	_textures.clear();
 }
 
 std::string ResourceManager::_JoinPath(const char* start, const char* end) {
