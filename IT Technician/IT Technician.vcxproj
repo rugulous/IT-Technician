@@ -132,14 +132,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\UI\Shader.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Engine\ResourceManager.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\UI\Shader.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Engine\ResourceManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader\Sprite\fragment.sh">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Shader\Sprite\vertex.sh">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

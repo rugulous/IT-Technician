@@ -3,13 +3,14 @@
 #include <iostream>
 
 #include "Game.h"
+#include "Engine/ResourceManager.h"
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
 Game game;
 
-void keyCallback(GLFWwindow* window, int key, int, int action, int)
+void keyCallback(GLFWwindow*, int key, int, int action, int)
 {
 	if (key >= 0 && key < 1024)
 	{
@@ -63,6 +64,8 @@ int main() {
 
 		glfwSwapBuffers(window);
 	}
+
+	ResourceManager::Clear();
 
 	glfwTerminate();
 	return 0;
