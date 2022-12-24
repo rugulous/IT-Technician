@@ -1,40 +1,69 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
 #include <iostream>
+
+#include "Game.h"
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
+Game game;
+
+void keyCallback(GLFWwindow* window, int key, int, int action, int)
+{
+	if (key >= 0 && key < 1024)
+	{
+		if (action == GLFW_PRESS) {
+			game.keys[key] = true;
+		}
+		else if (action == GLFW_RELEASE) {
+			game.keys[key] = false;
+		}
+	}
+}
+
+void framebufferSizeCallback(GLFWwindow*, int width, int height)
+{
+	glViewport(0, 0, width, height);
+}
+
 int main() {
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-    glfwWindowHint(GLFW_RESIZABLE, false);
+	glfwWindowHint(GLFW_RESIZABLE, false);
 
-    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "IT Technician", nullptr, nullptr);
-    glfwMakeContextCurrent(window);
+	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "IT Technician", nullptr, nullptr);
+	glfwMakeContextCurrent(window);
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "Failed to initialize GLAD" << std::endl;
+		return -1;
+	}
 
-    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glfwSetKeyCallback(window, keyCallback);
+	glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
-    while (!glfwWindowShouldClose(window))
-    {
-        glfwPollEvents();
-        glfwSwapBuffers(window);
-    }
+	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glfwTerminate();
-    return 0;
+	game.Init();
+
+	while (!glfwWindowShouldClose(window) && game.isRunning)
+	{
+		glfwPollEvents();
+
+		game.ProcessInput();
+
+		glfwSwapBuffers(window);
+	}
+
+	glfwTerminate();
+	return 0;
 }
