@@ -6,19 +6,24 @@
 
 #include "Engine/ResourceManager.h"
 
+#include "State/TestState.h"
+
 Game::~Game() {
-	delete _renderer;
+	if (_currentState != nullptr) {
+		delete _currentState;
+	}
 }
 
 void Game::Init() {
 	ResourceManager::LoadShader("sprite", "Shader/Sprite/");
+
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(600), static_cast<float>(800), 0.0f, -1.0f, 1.0f);
 	ResourceManager::GetShader("sprite").Use().SetInteger("sprite", 0);
 	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
 
 	ResourceManager::LoadTexture("face", "Resource/Texture/awesomeface.png", true);
 
-	_renderer = new SpriteRenderer();
+	_currentState = new TestState();
 
 	this->isRunning = true;
 }
@@ -29,11 +34,14 @@ void Game::ProcessInput() {
 	}
 }
 
-void Game::Update() {
-
+void Game::Update(double dt) {
+	if (_currentState != nullptr) {
+		_currentState->Update(dt);
+	}
 }
 
 void Game::Render() {
-	Texture2D face = ResourceManager::GetTexture("face");
-	_renderer->DrawSprite(face, glm::vec2(0.0f, 0.0f), glm::vec2(600, 800), 0.0f);
+	if (_currentState != nullptr) {
+		_currentState->Render();
+	}
 }

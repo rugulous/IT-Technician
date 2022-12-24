@@ -3,6 +3,7 @@
 #include <array>
 
 #include "Engine/UI/SpriteRenderer.h"
+#include "State/IGameState.h"
 
 class Game {
 public:
@@ -13,9 +14,9 @@ public:
 
 	void Init();
 	void ProcessInput();
-	void Update();
+	void Update(double dt);
 	void Render();
 
 private:
-	SpriteRenderer* _renderer;
+	IGameState* _currentState;
 };

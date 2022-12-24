@@ -134,6 +134,7 @@
   <ItemGroup>
     <ClCompile Include="Engine\UI\Shader.cpp" />
     <ClCompile Include="Engine\UI\SpriteRenderer.cpp" />
+    <ClCompile Include="State\TestState.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="Engine\UI\Texture2D.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -144,6 +145,8 @@
   <ItemGroup>
     <ClInclude Include="Engine\UI\Shader.h" />
     <ClInclude Include="Engine\UI\SpriteRenderer.h" />
+    <ClInclude Include="State\IGameState.h" />
+    <ClInclude Include="State\TestState.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Engine\UI\Texture2D.h" />
     <ClInclude Include="Game.h" />

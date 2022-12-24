@@ -56,12 +56,18 @@ int main() {
 
 	game.Init();
 
+	double deltaTime = 0.0;
+	double lastFrame = 0.0;
+
 	while (!glfwWindowShouldClose(window) && game.isRunning)
 	{
+		double currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
 		glfwPollEvents();
 
 		game.ProcessInput();
-		game.Update();
+		game.Update(deltaTime);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
