@@ -10,93 +10,94 @@ OverworldState::OverworldState() {
 }
 
 OverworldState::~OverworldState() {
-	delete _player;
 	delete _renderer;
 }
 
-void OverworldState::ProcessInput(std::array<bool, 1024> keys) {
+void OverworldState::ProcessInput(std::array<bool, 1024>* keys) {
 	if (_isMoving) {
 		//only listen for new input if we are not moving
 		return;
 	}
 
-	if (keys[GLFW_KEY_LEFT] && _canMove(-1)) {
+	if ((*keys)[GLFW_KEY_LEFT] && _canMove(-1)) {
 		_isMoving = true;
 		_direction = WEST;
-		_movementTimer = 0.5;
-		_moveMap = (_playerX == 4 && _x > 0);
+		_movementTimer = 0.2;
+		_moveMap = (_playerX == _center && _x > 0);
 	}
-	else if (keys[GLFW_KEY_RIGHT] && _canMove(1)) {
+	else if ((*keys)[GLFW_KEY_RIGHT] && _canMove(1)) {
 		_isMoving = true;
 		_direction = EAST;
-		_movementTimer = 0.5;
-		_moveMap = (_playerX == 4 && _x < _mapSize.width - _tileCount);
+		_movementTimer = 0.2;
+		_moveMap = (_playerX == _center && _x < _mapSize.width - _tileCount);
 	}
-	else if (keys[GLFW_KEY_UP] && _canMove(0, -1)) {
+	else if ((*keys)[GLFW_KEY_UP] && _canMove(0, -1)) {
 		_isMoving = true;
 		_direction = NORTH;
-		_movementTimer = 0.5;
-		_moveMap = (_playerY == 4 && _y > 0);
+		_movementTimer = 0.2;
+		_moveMap = (_playerY == _center && _y > 0);
 	}
-	else if (keys[GLFW_KEY_DOWN] && _canMove(0, 1)) {
+	else if ((*keys)[GLFW_KEY_DOWN] && _canMove(0, 1)) {
 		_isMoving = true;
 		_direction = SOUTH;
-		_movementTimer = 0.5;
-		_moveMap = (_playerY == 4 && _y < _mapSize.height - _tileCount);
+		_movementTimer = 0.2;
+		_moveMap = (_playerY == _center && _y < _mapSize.height - _tileCount);
 	}
 }
 
 int OverworldState::Update(double dt) {
-	if (_isMoving) {
-		double update = std::min(dt, _movementTimer);
-		float movementPartial = update * 2;
+	if (!_isMoving) {
+		return 0;
+	}
 
-		if (_direction == NORTH) {
-			if (_moveMap) {
-				_y -= movementPartial;
-			}
-			else {
-				_playerY -= movementPartial;
-			}
-		}
-		else if (_direction == SOUTH) {
-			if (_moveMap) {
-				_y += movementPartial;
-			}
-			else {
-				_playerY += movementPartial;
-			}
-		}
-		else if (_direction == EAST) {
-			if (_moveMap) {
-				_x += movementPartial;
-			}
-			else {
-				_playerX += movementPartial;
-			}
-		}
-		else if (_direction == WEST) {
-			if (_moveMap) {
-				_x -= movementPartial;
-			}
-			else {
-				_playerX -= movementPartial;
-			}
-		}
+	double update = std::min(dt, _movementTimer);
+	float movementPartial = update * 5;
 
-		_movementTimer -= update;
-		if (_movementTimer <= 0) {
-			_isMoving = false;
-			_movementTimer = 0;
+	if (_direction == NORTH) {
+		if (_moveMap) {
+			_y -= movementPartial;
+		}
+		else {
+			_playerY -= movementPartial;
+		}
+	}
+	else if (_direction == SOUTH) {
+		if (_moveMap) {
+			_y += movementPartial;
+		}
+		else {
+			_playerY += movementPartial;
+		}
+	}
+	else if (_direction == EAST) {
+		if (_moveMap) {
+			_x += movementPartial;
+		}
+		else {
+			_playerX += movementPartial;
+		}
+	}
+	else if (_direction == WEST) {
+		if (_moveMap) {
+			_x -= movementPartial;
+		}
+		else {
+			_playerX -= movementPartial;
+		}
+	}
 
-			if (_moveMap) {
+	_movementTimer -= update;
+	if (_movementTimer <= 0) {
+		_isMoving = false;
+		_movementTimer = 0;
+
+		if (_moveMap) {
 			_x = round(_x);
 			_y = round(_y);
-			}
-			else {
-				_playerX = round(_playerX);
-				_playerY = round(_playerY);
-			}
+		}
+		else {
+			_playerX = round(_playerX);
+			_playerY = round(_playerY);
 		}
 	}
 
@@ -105,6 +106,7 @@ int OverworldState::Update(double dt) {
 
 void OverworldState::Render() {
 	Texture2D tile = ResourceManager::GetTexture("tile");
+	Texture2D floor = ResourceManager::GetTexture("floor");
 
 	int minX = std::max(0, (int)_x - 1);
 	int minY = std::max(0, (int)_y - 1);
@@ -120,16 +122,27 @@ void OverworldState::Render() {
 
 			glm::vec3 colour = (_tiles[(int)y][(int)x].isSolid) ? glm::vec3(1.0f, 0.0f, 0.0f) : glm::vec3(0.58f, 0.3f, 0.0f);
 
-			_renderer->DrawSprite(tile, glm::vec2(xPos * _tileSize.x, yPos * _tileSize.y), _tileSize, 0.0F, colour);
+			_renderer->DrawSprite(floor, glm::vec2(xPos * _tileSize.x, yPos * _tileSize.y), _tileSize, 0.0F, colour);
 		}
 	}
 
 	_renderer->DrawSprite(tile, glm::vec2(_playerX * _tileSize.x, _playerY * _tileSize.y), _tileSize, 0.0F, glm::vec3(0.0F, 1.0F, 0.0F));
 }
 
+void OverworldState::Release() {
+	ResourceManager::ReleaseTexture("tile");
+	ResourceManager::ReleaseTexture("floor");
+}
+
 void OverworldState::_Init() {
+	ResourceManager::LoadTexture("tile", "Resource/Texture/tile.png");
+	ResourceManager::LoadTexture("floor", "Resource/Texture/Wood Floor A.png");
+
 	std::vector<std::vector<unsigned int>> tileData = ResourceManager::LoadMap("Map/Overworld/test.map");
-	_tileCount = 9;
+	_tileCount = 14;
+	_center = floor(_tileCount / 2);
+	_playerX = _center;
+	_playerY = _center;
 
 	// calculate dimensions
 	_mapSize.height = tileData.size();
@@ -166,7 +179,6 @@ void OverworldState::_Init() {
 		this->_tiles.push_back(row);
 	}
 
-	_player = new GameObject(glm::vec2(4.0f * unitWidth, 4.0f * unitHeight), _tileSize, "tile", glm::vec3(0.0f, 1.0f, 0.0f));
 	_renderer = new SpriteRenderer();
 }
 

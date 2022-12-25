@@ -135,6 +135,7 @@
     <ClCompile Include="Engine\Entity\GameObject.cpp" />
     <ClCompile Include="Engine\UI\Shader.cpp" />
     <ClCompile Include="Engine\UI\SpriteRenderer.cpp" />
+    <ClCompile Include="State\IGameState.cpp" />
     <ClCompile Include="State\OverworldState.cpp" />
     <ClCompile Include="State\TestState.cpp" />
     <ClCompile Include="stb_image.cpp" />
@@ -170,6 +171,9 @@
       <DeploymentContent>true</DeploymentContent>
     </Image>
     <Image Include="Resource\Texture\tile.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Resource\Texture\Wood Floor A.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
   </ItemGroup>

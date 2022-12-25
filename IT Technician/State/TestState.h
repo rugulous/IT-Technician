@@ -8,9 +8,9 @@ public:
 	TestState();
 	~TestState() override;
 
-	void ProcessInput(std::array<bool, 1024> keys) override;
 	int Update(double dt) override;
 	void Render() override;
+	void Release() override;
 
 private:
 	SpriteRenderer* _renderer;

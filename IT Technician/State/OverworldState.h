@@ -27,27 +27,28 @@ public:
 	OverworldState();
 	~OverworldState() override;
 
-	void ProcessInput(std::array<bool, 1024> keys) override;
+	void ProcessInput(std::array<bool, 1024> *keys) override;
 	int Update(double dt) override;
 	void Render() override;
+	void Release() override;
 
 private:
 	void _Init() override;
 
 	std::vector<std::vector<Tile>> _tiles;
 
-	GameObject* _player;
 	SpriteRenderer* _renderer;
 
 	glm::vec2 _tileSize;
 	Size _mapSize;
 	int _tileCount;
+	int _center;
 
 	float _x = 0;
 	float _y = 0;
 
-	float _playerX = 4;
-	float _playerY = 4;
+	float _playerX;
+	float _playerY;
 
 	bool _isMoving = false;
 	Direction _direction = SOUTH;

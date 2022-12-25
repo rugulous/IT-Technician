@@ -52,6 +52,13 @@ Shader ResourceManager::GetShader(std::string name)
 	return _shaders[name];
 }
 
+void ResourceManager::ReleaseShader(std::string name)
+{
+	Shader shader = GetShader(name);
+	shader.Clear();
+	_shaders.erase(name);
+}
+
 Texture2D ResourceManager::LoadTexture(std::string name, const char* file, bool alpha)
 {
 	Texture2D texture(alpha);
@@ -70,6 +77,13 @@ Texture2D ResourceManager::LoadTexture(std::string name, const char* file, bool 
 Texture2D ResourceManager::GetTexture(std::string name)
 {
 	return _textures[name];
+}
+
+void ResourceManager::ReleaseTexture(std::string name)
+{
+	Texture2D texture = GetTexture(name);
+	texture.Clear();
+	_textures.erase(name);
 }
 
 std::vector<std::vector<unsigned int>> ResourceManager::LoadMap(const char* file)
@@ -104,7 +118,7 @@ void ResourceManager::Clear() {
 	for (auto iter : _textures) {
 		iter.second.Clear();
 	}
-	
+
 	_textures.clear();
 }
 

@@ -48,6 +48,9 @@
     <ClCompile Include="Engine\Entity\GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="State\IGameState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\ResourceManager.h">
@@ -91,6 +94,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Resource\Texture\tile.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\Texture\Wood Floor A.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

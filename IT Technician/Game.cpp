@@ -22,9 +22,6 @@ void Game::Init() {
 	ResourceManager::GetShader("sprite").Use().SetInteger("sprite", 0);
 	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
 
-	ResourceManager::LoadTexture("face", "Resource/Texture/awesomeface.png", true);
-	ResourceManager::LoadTexture("tile", "Resource/Texture/tile.png");
-
 	_currentState = new TestState();
 
 	this->isRunning = true;
@@ -36,7 +33,7 @@ void Game::ProcessInput() {
 	}
 
 	if (_currentState != nullptr) {
-		_currentState->ProcessInput(this->keys);
+		_currentState->ProcessInput(&this->keys);
 	}
 }
 
@@ -45,8 +42,7 @@ void Game::Update(double dt) {
 		int res = _currentState->Update(dt);
 
 		if (res == 1) {
-			delete _currentState;
-			_currentState = new OverworldState();
+			_changeState(new OverworldState());
 		}
 	}
 }
@@ -55,4 +51,13 @@ void Game::Render() {
 	if (_currentState != nullptr) {
 		_currentState->Render();
 	}
+}
+
+void Game::_changeState(IGameState* newState){
+	if (_currentState != nullptr) {
+		_currentState->Release();
+		delete _currentState;
+	}
+
+	_currentState = newState;
 }

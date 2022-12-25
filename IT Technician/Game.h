@@ -19,4 +19,6 @@ public:
 
 private:
 	IGameState* _currentState;
+
+	void _changeState(IGameState *newState);
 };
