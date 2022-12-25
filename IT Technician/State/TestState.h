@@ -6,13 +6,14 @@
 class TestState : public IGameState {
 public:
 	TestState();
-	~TestState();
+	~TestState() override;
 
-	void Init();
-	void Update(double dt);
-	void Render();
+	int Update(double dt) override;
+	void Render() override;
 
 private:
 	SpriteRenderer* _renderer;
 	float _rotation;
+
+	void _Init() override;
 };

@@ -7,6 +7,7 @@
 #include "Engine/ResourceManager.h"
 
 #include "State/TestState.h"
+#include "State/OverworldState.h"
 
 Game::~Game() {
 	if (_currentState != nullptr) {
@@ -22,6 +23,7 @@ void Game::Init() {
 	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
 
 	ResourceManager::LoadTexture("face", "Resource/Texture/awesomeface.png", true);
+	ResourceManager::LoadTexture("tile", "Resource/Texture/tile.png");
 
 	_currentState = new TestState();
 
@@ -36,7 +38,12 @@ void Game::ProcessInput() {
 
 void Game::Update(double dt) {
 	if (_currentState != nullptr) {
-		_currentState->Update(dt);
+		int res = _currentState->Update(dt);
+
+		if (res == 1) {
+			delete _currentState;
+			_currentState = new OverworldState();
+		}
 	}
 }
 

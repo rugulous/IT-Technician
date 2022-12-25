@@ -2,9 +2,11 @@
 
 #include <string>
 #include <map>
+#include <vector>
 
 #include "UI/Shader.h"
 #include "UI/Texture2D.h"
+
 
 class ResourceManager {
 public:
@@ -16,6 +18,8 @@ public:
 
 	static Texture2D LoadTexture(std::string name, const char* file, bool alpha = false);
 	static Texture2D GetTexture(std::string name);
+
+	static std::vector<std::vector<unsigned int>> LoadMap(const char* file);
 
 	static void Clear();
 

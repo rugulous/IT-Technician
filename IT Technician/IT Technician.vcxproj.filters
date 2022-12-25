@@ -42,6 +42,12 @@
     <ClCompile Include="State\TestState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="State\OverworldState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entity\GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\ResourceManager.h">
@@ -68,13 +74,23 @@
     <ClInclude Include="State\TestState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="State\OverworldState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entity\GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\Sprite\vertex.sh" />
     <None Include="Shader\Sprite\fragment.sh" />
+    <None Include="Map\Overworld\test.map" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resource\Texture\awesomeface.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\Texture\tile.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

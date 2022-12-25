@@ -72,6 +72,28 @@ Texture2D ResourceManager::GetTexture(std::string name)
 	return _textures[name];
 }
 
+std::vector<std::vector<unsigned int>> ResourceManager::LoadMap(const char* file)
+{
+	unsigned int tileCode;
+	std::string line;
+	std::ifstream fstream(file);
+	std::vector<std::vector<unsigned int>> tileData;
+
+	if (fstream)
+	{
+		while (std::getline(fstream, line)) // read each line from level file
+		{
+			std::istringstream sstream(line);
+			std::vector<unsigned int> row;
+			while (sstream >> tileCode) // read each word separated by spaces
+				row.push_back(tileCode);
+			tileData.push_back(row);
+		}
+	}
+
+	return tileData;
+}
+
 void ResourceManager::Clear() {
 	for (auto iter : _shaders) {
 		iter.second.Clear();
