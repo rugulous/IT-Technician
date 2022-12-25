@@ -15,6 +15,13 @@ struct Tile {
 	bool isSolid;
 };
 
+enum Direction {
+	NORTH,
+	SOUTH,
+	EAST,
+	WEST
+};
+
 class OverworldState : public IGameState {
 public:
 	OverworldState();
@@ -34,12 +41,18 @@ private:
 
 	glm::vec2 _tileSize;
 	Size _mapSize;
+	int _tileCount;
 
 	float _x = 0;
 	float _y = 0;
 
 	float _playerX = 4;
 	float _playerY = 4;
+
+	bool _isMoving = false;
+	Direction _direction = SOUTH;
+	double _movementTimer = 0;
+	bool _moveMap = true;
 
 	bool _canMove(int xOffset = 0, int yOffset = 0);
 };
