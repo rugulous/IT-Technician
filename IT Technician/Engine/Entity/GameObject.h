@@ -11,7 +11,7 @@ public:
 
     bool isSolid;
 
-    virtual void Draw(SpriteRenderer& renderer);
+    virtual void Draw(SpriteRenderer& renderer, glm::vec2 offset = glm::vec2(0.0f));
 
 private:
     glm::vec2 _position;

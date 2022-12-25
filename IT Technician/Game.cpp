@@ -18,7 +18,7 @@ Game::~Game() {
 void Game::Init() {
 	ResourceManager::LoadShader("sprite", "Shader/Sprite/");
 
-	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(600), static_cast<float>(800), 0.0f, -1.0f, 1.0f);
+	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(594), static_cast<float>(792), 0.0f, -1.0f, 1.0f);
 	ResourceManager::GetShader("sprite").Use().SetInteger("sprite", 0);
 	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
 
@@ -33,6 +33,10 @@ void Game::Init() {
 void Game::ProcessInput() {
 	if (this->keys[GLFW_KEY_ESCAPE]) {
 		this->isRunning = false;
+	}
+
+	if (_currentState != nullptr) {
+		_currentState->ProcessInput(this->keys);
 	}
 }
 
