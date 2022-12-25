@@ -37,4 +37,7 @@ private:
 
 	float _x = 0;
 	float _y = 0;
+
+	float _playerX = 4;
+	float _playerY = 4;
 };

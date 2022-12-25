@@ -15,20 +15,52 @@ OverworldState::~OverworldState() {
 }
 
 void OverworldState::ProcessInput(std::array<bool, 1024> keys) {
-	if (keys[GLFW_KEY_LEFT] && _x > 0) {
-		_x -= 0.01;
+	if (keys[GLFW_KEY_LEFT]) {
+		if (_playerX > 4) {
+			_playerX -= 0.01;
+		}
+		else if (_x > 0) {
+			_x -= 0.01;
+		}
+		else if (_playerX > 0) {
+			_playerX -= 0.01;
+		}
 	}
 
-	if (keys[GLFW_KEY_RIGHT] && _x < _mapSize.width - 9) {
-		_x += 0.01;
+	if (keys[GLFW_KEY_RIGHT]) {
+		if (_playerX < 4) {
+			_playerX += 0.01;
+		}
+		else if (_x < _mapSize.width - 9) {
+			_x += 0.01;
+		}
+		else if (_playerX < 8) {
+			_playerX += 0.01;
+		}
 	}
 
-	if (keys[GLFW_KEY_UP] && _y > 0) {
-		_y -= 0.01;
+	if (keys[GLFW_KEY_UP]) {
+		if (_playerY > 4) {
+			_playerY -= 0.01;
+		}
+		else if (_y > 0) {
+			_y -= 0.01;
+		}
+		else if (_playerY > 0) {
+			_playerY -= 0.01;
+		}
 	}
 
-	if (keys[GLFW_KEY_DOWN] && _y < _mapSize.height - 9) {
-		_y += 0.01;
+	if (keys[GLFW_KEY_DOWN]) {
+		if (_playerY < 4) {
+			_playerY += 0.01;
+		}
+		else if (_y < _mapSize.height - 9) {
+			_y += 0.01;
+		}
+		else if (_playerY < 8) {
+			_playerY += 0.01;
+		}
 	}
 }
 
@@ -47,7 +79,7 @@ void OverworldState::Render() {
 		}
 	}
 
-	_player->Draw(*_renderer);
+	_renderer->DrawSprite(tile, glm::vec2(_playerX * _tileSize.x, _playerY * _tileSize.y), _tileSize, 0.0F, glm::vec3(0.0F, 1.0F, 0.0F));
 }
 
 void OverworldState::_Init() {
