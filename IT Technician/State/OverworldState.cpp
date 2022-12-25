@@ -18,7 +18,7 @@ void OverworldState::ProcessInput(std::array<bool, 1024> keys) {
 	if (keys[GLFW_KEY_LEFT] && _x > 0) {
 		_x -= 0.01;
 	}
-	
+
 	if (keys[GLFW_KEY_RIGHT] && _x < _mapSize.width - 9) {
 		_x += 0.01;
 	}
@@ -37,10 +37,14 @@ int OverworldState::Update(double dt) {
 }
 
 void OverworldState::Render() {
-	glm::vec2 offset(_x * _tileSize.width, _y * _tileSize.height);
+	Texture2D tile = ResourceManager::GetTexture("tile");
 
-	for (GameObject& tile : this->_tiles) {
-		tile.Draw(*_renderer, offset);
+	for (int y = 0; y < 9; y++) {
+		for (int x = 0; x < 9; x++) {
+			glm::vec3 colour = (_tiles[y + (int)_y][x + (int)_x].isSolid) ? glm::vec3(1.0f, 0.0f, 0.0f) : glm::vec3(0.58f, 0.3f, 0.0f);
+
+			_renderer->DrawSprite(tile, glm::vec2(x * _tileSize.x, y * _tileSize.y), _tileSize, 0.0F, colour);
+		}
 	}
 
 	_player->Draw(*_renderer);
@@ -69,28 +73,23 @@ void OverworldState::_Init() {
 		offsetY = ((maxSize - _mapSize.width) / 2) * unitWidth;
 	}
 
-	glm::vec2 size(unitWidth, unitHeight);
+	_tileSize = glm::vec2(unitWidth, unitHeight);
 
 	for (unsigned int y = 0; y < _mapSize.height; ++y)
 	{
+		std::vector<Tile> row;
+
 		for (unsigned int x = 0; x < _mapSize.width; ++x)
 		{
-			glm::vec2 pos((unitWidth * x) + offsetY, (unitHeight * y) + offsetX);
+			Tile tile;
+			tile.isSolid = (tileData[y][x] == 1);
 
-			auto colour = glm::vec3(0.58f, 0.3f, 0.0f);
-
-			if (tileData[y][x] == 1) // solid
-			{
-				colour = glm::vec3(1.0f, 0.0f, 0.0f);
-			}
-
-			this->_tiles.emplace_back(pos, size, "tile", colour);
+			row.push_back(tile);
 		}
+
+		this->_tiles.push_back(row);
 	}
 
-	_player = new GameObject(glm::vec2(4.0f * unitWidth, 4.0f * unitHeight), size, "tile", glm::vec3(0.0f, 1.0f, 0.0f));
+	_player = new GameObject(glm::vec2(4.0f * unitWidth, 4.0f * unitHeight), _tileSize, "tile", glm::vec3(0.0f, 1.0f, 0.0f));
 	_renderer = new SpriteRenderer();
-
-	_tileSize.width = unitWidth;
-	_tileSize.height = unitHeight;
 }

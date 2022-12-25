@@ -11,6 +11,10 @@ struct Size {
 	float height;
 };
 
+struct Tile {
+	bool isSolid;
+};
+
 class OverworldState : public IGameState {
 public:
 	OverworldState();
@@ -23,12 +27,12 @@ public:
 private:
 	void _Init() override;
 
-	std::vector<GameObject> _tiles;
+	std::vector<std::vector<Tile>> _tiles;
 
 	GameObject* _player;
 	SpriteRenderer* _renderer;
 
-	Size _tileSize;
+	glm::vec2 _tileSize;
 	Size _mapSize;
 
 	float _x = 0;
