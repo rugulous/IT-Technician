@@ -15,7 +15,7 @@ OverworldState::~OverworldState() {
 }
 
 void OverworldState::ProcessInput(std::array<bool, 1024> keys) {
-	if (keys[GLFW_KEY_LEFT]) {
+	if (keys[GLFW_KEY_LEFT] && _canMove(-1)) {
 		if (_playerX > 4) {
 			_playerX -= 0.01;
 		}
@@ -27,7 +27,7 @@ void OverworldState::ProcessInput(std::array<bool, 1024> keys) {
 		}
 	}
 
-	if (keys[GLFW_KEY_RIGHT]) {
+	if (keys[GLFW_KEY_RIGHT] && _canMove(1)) {
 		if (_playerX < 4) {
 			_playerX += 0.01;
 		}
@@ -39,7 +39,7 @@ void OverworldState::ProcessInput(std::array<bool, 1024> keys) {
 		}
 	}
 
-	if (keys[GLFW_KEY_UP]) {
+	if (keys[GLFW_KEY_UP] && _canMove(0, -1)) {
 		if (_playerY > 4) {
 			_playerY -= 0.01;
 		}
@@ -51,7 +51,7 @@ void OverworldState::ProcessInput(std::array<bool, 1024> keys) {
 		}
 	}
 
-	if (keys[GLFW_KEY_DOWN]) {
+	if (keys[GLFW_KEY_DOWN] && _canMove(0, 1)) {
 		if (_playerY < 4) {
 			_playerY += 0.01;
 		}
@@ -124,4 +124,11 @@ void OverworldState::_Init() {
 
 	_player = new GameObject(glm::vec2(4.0f * unitWidth, 4.0f * unitHeight), _tileSize, "tile", glm::vec3(0.0f, 1.0f, 0.0f));
 	_renderer = new SpriteRenderer();
+}
+
+bool OverworldState::_canMove(int xOffset, int yOffset) {
+	int x = floor(_x) + floor(_playerX) + xOffset;
+	int y = floor(_y) + floor(_playerY) + yOffset;
+
+	return !_tiles[y][x].isSolid;
 }

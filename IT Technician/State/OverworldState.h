@@ -40,4 +40,6 @@ private:
 
 	float _playerX = 4;
 	float _playerY = 4;
+
+	bool _canMove(int xOffset = 0, int yOffset = 0);
 };
