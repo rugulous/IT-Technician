@@ -170,10 +170,10 @@
     <Image Include="Resource\Texture\awesomeface.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
+    <Image Include="Resource\Texture\DeskA.png" />
+    <Image Include="Resource\Texture\DeskB.png" />
+    <Image Include="Resource\Texture\DeskC.png" />
     <Image Include="Resource\Texture\tile.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="Resource\Texture\Wood Floor A.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
   </ItemGroup>

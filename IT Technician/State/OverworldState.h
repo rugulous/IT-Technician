@@ -13,6 +13,7 @@ struct Size {
 
 struct Tile {
 	bool isSolid;
+	int itemType;
 };
 
 enum Direction {

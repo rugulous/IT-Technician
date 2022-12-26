@@ -96,7 +96,13 @@
     <Image Include="Resource\Texture\tile.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Resource\Texture\Wood Floor A.png">
+    <Image Include="Resource\Texture\DeskA.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\Texture\DeskB.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\Texture\DeskC.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

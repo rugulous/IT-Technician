@@ -106,7 +106,10 @@ int OverworldState::Update(double dt) {
 
 void OverworldState::Render() {
 	Texture2D tile = ResourceManager::GetTexture("tile");
-	Texture2D floor = ResourceManager::GetTexture("floor");
+	Texture2D deskA = ResourceManager::GetTexture("deska");
+	Texture2D deskB = ResourceManager::GetTexture("deskb");
+	Texture2D deskC = ResourceManager::GetTexture("deskc");
+	Texture2D chair = ResourceManager::GetTexture("chair");
 
 	int minX = std::max(0, (int)_x - 1);
 	int minY = std::max(0, (int)_y - 1);
@@ -120,9 +123,36 @@ void OverworldState::Render() {
 			double xPos = x - _x;
 			double yPos = y - _y;
 
-			glm::vec3 colour = (_tiles[(int)y][(int)x].isSolid) ? glm::vec3(1.0f, 0.0f, 0.0f) : glm::vec3(0.58f, 0.3f, 0.0f);
+			glm::vec3 colour = glm::vec3(1.0f);
 
-			_renderer->DrawSprite(floor, glm::vec2(xPos * _tileSize.x, yPos * _tileSize.y), _tileSize, 0.0F, colour);
+			Texture2D texture;
+			switch (_tiles[y][x].itemType) {
+			case 2:
+				texture = deskA;
+				break;
+
+			case 3:
+				texture = deskB;
+				break;
+
+			case 4:
+				texture = deskC;
+				break;
+
+			case 5:
+				texture = chair;
+				break;
+
+			default:
+				texture = tile;
+				colour = glm::vec3(0.58f, 0.3f, 0.0f);
+			}
+
+			if (_tiles[y][x].itemType == 1) {
+				colour = glm::vec3(1.0f, 0.0f, 0.0f);
+			}
+
+			_renderer->DrawSprite(texture, glm::vec2(xPos * _tileSize.x, yPos * _tileSize.y), _tileSize, 0.0F, colour);
 		}
 	}
 
@@ -131,15 +161,23 @@ void OverworldState::Render() {
 
 void OverworldState::Release() {
 	ResourceManager::ReleaseTexture("tile");
-	ResourceManager::ReleaseTexture("floor");
+	ResourceManager::ReleaseTexture("deska");
+	ResourceManager::ReleaseTexture("deskb");
+	ResourceManager::ReleaseTexture("deskc");
+	ResourceManager::ReleaseTexture("chair");
 }
 
 void OverworldState::_Init() {
 	ResourceManager::LoadTexture("tile", "Resource/Texture/tile.png");
-	ResourceManager::LoadTexture("floor", "Resource/Texture/Wood Floor A.png");
+	
+	ResourceManager::LoadTexture("deska", "Resource/Texture/DeskA.png", true);
+	ResourceManager::LoadTexture("deskb", "Resource/Texture/DeskB.png", true);
+	ResourceManager::LoadTexture("deskc", "Resource/Texture/DeskC.png", true);
+
+	ResourceManager::LoadTexture("chair", "Resource/Texture/chair.png", true);
 
 	std::vector<std::vector<unsigned int>> tileData = ResourceManager::LoadMap("Map/Overworld/test.map");
-	_tileCount = 14;
+	_tileCount = 9;
 	_center = floor(_tileCount / 2);
 	_playerX = _center;
 	_playerY = _center;
@@ -171,7 +209,8 @@ void OverworldState::_Init() {
 		for (unsigned int x = 0; x < _mapSize.width; ++x)
 		{
 			Tile tile;
-			tile.isSolid = (tileData[y][x] == 1);
+			tile.isSolid = (tileData[y][x] > 0 && tileData[y][x] < 5);
+			tile.itemType = tileData[y][x];
 
 			row.push_back(tile);
 		}
