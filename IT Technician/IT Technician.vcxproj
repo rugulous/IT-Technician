@@ -170,9 +170,21 @@
     <Image Include="Resource\Texture\awesomeface.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="Resource\Texture\DeskA.png" />
-    <Image Include="Resource\Texture\DeskB.png" />
-    <Image Include="Resource\Texture\DeskC.png" />
+    <Image Include="Resource\Texture\chair.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Resource\Texture\DeskA.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Resource\Texture\DeskB.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Resource\Texture\DeskC.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Resource\Texture\laptop.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
     <Image Include="Resource\Texture\tile.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>

@@ -110,6 +110,7 @@ void OverworldState::Render() {
 	Texture2D deskB = ResourceManager::GetTexture("deskb");
 	Texture2D deskC = ResourceManager::GetTexture("deskc");
 	Texture2D chair = ResourceManager::GetTexture("chair");
+	Texture2D laptop = ResourceManager::GetTexture("laptop");
 
 	int minX = std::max(0, (int)_x - 1);
 	int minY = std::max(0, (int)_y - 1);
@@ -153,6 +154,10 @@ void OverworldState::Render() {
 			}
 
 			_renderer->DrawSprite(texture, glm::vec2(xPos * _tileSize.x, yPos * _tileSize.y), _tileSize, 0.0F, colour);
+
+			if (_tiles[y][x].itemType == 3) {
+				_renderer->DrawSprite(laptop, glm::vec2((xPos * _tileSize.x) + (_tileSize.x / 3), yPos * _tileSize.y), _tileSize * glm::vec2(0.4f));
+			}
 		}
 	}
 
@@ -165,6 +170,7 @@ void OverworldState::Release() {
 	ResourceManager::ReleaseTexture("deskb");
 	ResourceManager::ReleaseTexture("deskc");
 	ResourceManager::ReleaseTexture("chair");
+	ResourceManager::ReleaseTexture("laptop");
 }
 
 void OverworldState::_Init() {
@@ -175,6 +181,7 @@ void OverworldState::_Init() {
 	ResourceManager::LoadTexture("deskc", "Resource/Texture/DeskC.png", true);
 
 	ResourceManager::LoadTexture("chair", "Resource/Texture/chair.png", true);
+	ResourceManager::LoadTexture("laptop", "Resource/Texture/laptop.png", true);
 
 	std::vector<std::vector<unsigned int>> tileData = ResourceManager::LoadMap("Map/Overworld/test.map");
 	_tileCount = 9;

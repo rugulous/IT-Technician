@@ -105,5 +105,11 @@
     <Image Include="Resource\Texture\DeskC.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Resource\Texture\chair.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\Texture\laptop.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
