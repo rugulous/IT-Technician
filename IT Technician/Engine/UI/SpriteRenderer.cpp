@@ -14,8 +14,8 @@ SpriteRenderer::~SpriteRenderer() {
 
 void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color)
 {
-	Shader shader = ResourceManager::GetShader("sprite");
-	shader.Use();
+	Shader* shader = ResourceManager::GetShader("sprite");
+	shader->Use();
 
     // prepare transformations
     glm::mat4 model = glm::mat4(1.0f);
@@ -27,8 +27,8 @@ void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec2 position, glm::vec
 
     model = glm::scale(model, glm::vec3(size, 1.0f));
 
-    shader.SetMatrix4("model", model);
-    shader.SetVector3f("spriteColor", color);
+    shader->SetMatrix4("model", model);
+    shader->SetVector3f("spriteColor", color);
 
     glActiveTexture(GL_TEXTURE0);
     texture.Bind();

@@ -21,7 +21,7 @@ std::string ResourceManager::ReadFile(const char* filePath) {
 	return data;
 }
 
-Shader ResourceManager::LoadShader(std::string name, const char* filePath, const char* vertexPath, const char* fragmentPath, const char* geometryPath)
+Shader* ResourceManager::LoadShader(std::string name, const char* filePath, const char* vertexPath, const char* fragmentPath, const char* geometryPath)
 {
 	char end = filePath[strlen(filePath) - 1];
 	if (end != '\\' && end != '/') {
@@ -44,18 +44,18 @@ Shader ResourceManager::LoadShader(std::string name, const char* filePath, const
 	shader.Compile(vertex.c_str(), fragment.c_str(), geometry.c_str());
 	
 	_shaders[name] = shader;
-	return shader;
+	return GetShader(name);
 }
 
-Shader ResourceManager::GetShader(std::string name)
+Shader* ResourceManager::GetShader(std::string name)
 {
-	return _shaders[name];
+	return &_shaders[name];
 }
 
 void ResourceManager::ReleaseShader(std::string name)
 {
-	Shader shader = GetShader(name);
-	shader.Clear();
+	Shader* shader = GetShader(name);
+	shader->Clear();
 	_shaders.erase(name);
 }
 

@@ -19,8 +19,10 @@ void Game::Init() {
 	ResourceManager::LoadShader("sprite", "Shader/Sprite/");
 
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(594), static_cast<float>(792), 0.0f, -1.0f, 1.0f);
-	ResourceManager::GetShader("sprite").Use().SetInteger("sprite", 0);
-	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
+	Shader* sprite = ResourceManager::GetShader("sprite");
+	sprite->Use();
+	sprite->SetInteger("sprite", 0);
+	sprite->SetMatrix4("projection", projection);
 
 	_currentState = new TestState();
 
