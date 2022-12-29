@@ -99,6 +99,10 @@ int OverworldState::Update(double dt) {
 			_playerX = round(_playerX);
 			_playerY = round(_playerY);
 		}
+
+		if (_tiles[_y + _playerY][_x + _playerX].itemType == 5) {
+			return 2;
+		}
 	}
 
 	return 0;
@@ -174,6 +178,8 @@ void OverworldState::Release() {
 }
 
 void OverworldState::_Init() {
+	background = Colour(0.58f, 0.3f, 0.0f);
+
 	ResourceManager::LoadTexture("tile", "Resource/Texture/tile.png");
 	
 	ResourceManager::LoadTexture("deska", "Resource/Texture/DeskA.png", true);

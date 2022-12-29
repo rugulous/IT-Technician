@@ -133,6 +133,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Entity\GameObject.cpp" />
+    <ClCompile Include="Engine\UI\Colour.cpp" />
     <ClCompile Include="Engine\UI\Shader.cpp" />
     <ClCompile Include="Engine\UI\SpriteRenderer.cpp" />
     <ClCompile Include="State\IGameState.cpp" />
@@ -147,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Entity\GameObject.h" />
+    <ClInclude Include="Engine\UI\Colour.h" />
     <ClInclude Include="Engine\UI\Shader.h" />
     <ClInclude Include="Engine\UI\SpriteRenderer.h" />
     <ClInclude Include="State\IGameState.h" />

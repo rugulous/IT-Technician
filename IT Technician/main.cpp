@@ -69,9 +69,6 @@ int main() {
 		game.ProcessInput();
 		game.Update(deltaTime);
 
-		glClearColor(0.58f, 0.3f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-
 		game.Render();
 
 		glfwSwapBuffers(window);

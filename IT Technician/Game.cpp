@@ -44,13 +44,23 @@ void Game::Update(double dt) {
 		if (res == 1) {
 			_changeState(new OverworldState());
 		}
+		else if (res == 2) {
+			_changeState(nullptr); //TODO add minigame
+		}
 	}
 }
 
 void Game::Render() {
 	if (_currentState != nullptr) {
+		glClearColor(_currentState->background.red, _currentState->background.green, _currentState->background.blue, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
 		_currentState->Render();
+		return;
 	}
+
+	glClearColor(0, 0, 0, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void Game::_changeState(IGameState* newState){
