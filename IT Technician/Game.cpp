@@ -8,6 +8,7 @@
 
 #include "State/TestState.h"
 #include "State/OverworldState.h"
+#include "State/HackerState.h"
 
 Game::~Game() {
 	if (_currentState != nullptr) {
@@ -47,7 +48,7 @@ void Game::Update(double dt) {
 			_changeState(new OverworldState());
 		}
 		else if (res == 2) {
-			_changeState(nullptr); //TODO add minigame
+			_changeState(new HackerState());
 		}
 	}
 }

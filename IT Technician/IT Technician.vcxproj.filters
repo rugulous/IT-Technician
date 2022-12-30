@@ -134,6 +134,8 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="Resource\Font\inconsolata.ttf" />
-    <Font Include="Resource\Font\Arial.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resource\String\hacker.txt" />
   </ItemGroup>
 </Project>

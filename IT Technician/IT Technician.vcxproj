@@ -198,12 +198,14 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="Resource\Font\Arial.ttf">
-      <DeploymentContent>true</DeploymentContent>
-    </Font>
     <Font Include="Resource\Font\inconsolata.ttf">
       <DeploymentContent>true</DeploymentContent>
     </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resource\String\hacker.txt">
+      <DeploymentContent>true</DeploymentContent>
+    </Text>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
