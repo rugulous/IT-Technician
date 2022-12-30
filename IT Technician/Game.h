@@ -19,6 +19,8 @@ public:
 
 private:
 	IGameState* _currentState = nullptr;
+	IGameState* _previousState = nullptr;
 
-	void _changeState(IGameState *newState);
+	void _changeState(IGameState *newState, bool destroy = false);
+	void _restoreState(bool destroy = true);
 };

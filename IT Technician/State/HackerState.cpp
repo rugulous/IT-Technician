@@ -30,7 +30,7 @@ void HackerState::ProcessInput(std::array<bool, 1024>* keys) {
 
 int HackerState::Update(double dt) {
 	if (_progress > _fullText.size()) {
-		return 1; //TODO: return to last place
+		return 3;
 	}
 
 	return 0;

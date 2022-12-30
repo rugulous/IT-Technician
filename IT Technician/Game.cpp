@@ -47,10 +47,13 @@ void Game::Update(double dt) {
 		int res = _currentState->Update(dt);
 
 		if (res == 1) {
-			_changeState(new OverworldState());
+			_changeState(new OverworldState(), true);
 		}
 		else if (res == 2) {
 			_changeState(new HackerState());
+		}
+		else if (res == 3) {
+			_restoreState();
 		}
 	}
 }
@@ -68,10 +71,15 @@ void Game::Render() {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Game::_changeState(IGameState* newState){
+void Game::_changeState(IGameState* newState, bool destroy){
 	if (_currentState != nullptr) {
-		_currentState->Release();
-		delete _currentState;
+		if (destroy) {
+			_currentState->Release();
+			delete _currentState;
+		}
+		else {
+			_previousState = _currentState;
+		}
 	}
 
 	if (newState != nullptr) {
@@ -79,4 +87,22 @@ void Game::_changeState(IGameState* newState){
 	}
 
 	_currentState = newState;
+}
+
+void Game::_restoreState(bool destroy) {
+	if (_previousState == nullptr) {
+		return;
+	}
+
+	IGameState* tmp = _currentState;
+	_currentState = _previousState;
+
+	if (destroy && tmp != nullptr) {
+		tmp->Release();
+		delete tmp;
+		_previousState = nullptr;
+	}
+	else {
+		_previousState = tmp;
+	}
 }
