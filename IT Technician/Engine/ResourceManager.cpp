@@ -7,7 +7,7 @@
 std::map<std::string, Shader> ResourceManager::_shaders;
 std::map<std::string, Texture2D> ResourceManager::_textures;
 
-std::string ResourceManager::ReadFile(const char* filePath) {
+std::string ResourceManager::ReadFile(std::string filePath) {
 	std::string data = "";
 
 	std::ifstream stream(filePath);
@@ -21,9 +21,9 @@ std::string ResourceManager::ReadFile(const char* filePath) {
 	return data;
 }
 
-Shader* ResourceManager::LoadShader(std::string name, const char* filePath, const char* vertexPath, const char* fragmentPath, const char* geometryPath)
+Shader* ResourceManager::LoadShader(std::string name, std::string filePath, const char* vertexPath, const char* fragmentPath, const char* geometryPath)
 {
-	char end = filePath[strlen(filePath) - 1];
+	char end = filePath[filePath.length() - 1];
 	if (end != '\\' && end != '/') {
 		filePath += '/';
 	}
@@ -129,3 +129,6 @@ std::string ResourceManager::_JoinPath(const char* start, const char* end) {
 	return path;
 }
 
+std::string ResourceManager::_JoinPath(std::string start, const char* end) {
+	return start.append(end);
+}

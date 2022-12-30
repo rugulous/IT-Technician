@@ -10,9 +10,9 @@
 
 class ResourceManager {
 public:
-	static std::string ReadFile(const char* filePath);
+	static std::string ReadFile(std::string filePath);
 
-	static Shader* LoadShader(std::string name, const char* filePath, const char* vertexPath = "vertex.sh", 
+	static Shader* LoadShader(std::string name, std::string filePath, const char* vertexPath = "vertex.sh", 
 		const char* fragmentPath = "fragment.sh", const char* geometryPath = nullptr);
 	static Shader* GetShader(std::string name);
 	static void ReleaseShader(std::string name);
@@ -30,4 +30,5 @@ private:
 	static std::map<std::string, Texture2D> _textures;
 
 	static std::string _JoinPath(const char* start, const char* end);
+	static std::string _JoinPath(std::string start, const char* end);
 };

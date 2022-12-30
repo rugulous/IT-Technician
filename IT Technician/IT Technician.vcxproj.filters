@@ -54,6 +54,12 @@
     <ClCompile Include="Engine\UI\Colour.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\UI\TextRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="State\HackerState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\ResourceManager.h">
@@ -89,11 +95,19 @@
     <ClInclude Include="Engine\UI\Colour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\UI\TextRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="State\HackerState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\Sprite\vertex.sh" />
     <None Include="Shader\Sprite\fragment.sh" />
     <None Include="Map\Overworld\test.map" />
+    <None Include="Shader\Text\vertex.sh" />
+    <None Include="Shader\Text\fragment.sh" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resource\Texture\awesomeface.png">
@@ -117,5 +131,9 @@
     <Image Include="Resource\Texture\laptop.png">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Resource\Font\inconsolata.ttf" />
+    <Font Include="Resource\Font\Arial.ttf" />
   </ItemGroup>
 </Project>
