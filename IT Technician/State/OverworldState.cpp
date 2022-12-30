@@ -5,10 +5,6 @@
 
 #include "../Engine/ResourceManager.h"
 
-OverworldState::OverworldState() {
-	this->_Init();
-}
-
 OverworldState::~OverworldState() {
 	delete _renderer;
 }
@@ -19,29 +15,32 @@ void OverworldState::ProcessInput(std::array<bool, 1024>* keys) {
 		return;
 	}
 
+	auto playerX = (int)_playerX;
+	auto playerY = (int)_playerY;
+
 	if ((*keys)[GLFW_KEY_LEFT] && _canMove(-1)) {
 		_isMoving = true;
 		_direction = WEST;
 		_movementTimer = 0.2;
-		_moveMap = (_playerX == _center && _x > 0);
+		_moveMap = (playerX == _center && _x > 0);
 	}
 	else if ((*keys)[GLFW_KEY_RIGHT] && _canMove(1)) {
 		_isMoving = true;
 		_direction = EAST;
 		_movementTimer = 0.2;
-		_moveMap = (_playerX == _center && _x < _mapSize.width - _tileCount);
+		_moveMap = (playerX == _center && _x < _mapSize.width - _tileCount);
 	}
 	else if ((*keys)[GLFW_KEY_UP] && _canMove(0, -1)) {
 		_isMoving = true;
 		_direction = NORTH;
 		_movementTimer = 0.2;
-		_moveMap = (_playerY == _center && _y > 0);
+		_moveMap = (playerY == _center && _y > 0);
 	}
 	else if ((*keys)[GLFW_KEY_DOWN] && _canMove(0, 1)) {
 		_isMoving = true;
 		_direction = SOUTH;
 		_movementTimer = 0.2;
-		_moveMap = (_playerY == _center && _y < _mapSize.height - _tileCount);
+		_moveMap = (playerY == _center && _y < _mapSize.height - _tileCount);
 	}
 }
 
@@ -177,7 +176,7 @@ void OverworldState::Release() {
 	ResourceManager::ReleaseTexture("laptop");
 }
 
-void OverworldState::_Init() {
+void OverworldState::Init() {
 	background = Colour(0.58f, 0.3f, 0.0f);
 
 	ResourceManager::LoadTexture("tile", "Resource/Texture/tile.png");
@@ -191,27 +190,16 @@ void OverworldState::_Init() {
 
 	std::vector<std::vector<unsigned int>> tileData = ResourceManager::LoadMap("Map/Overworld/test.map");
 	_tileCount = 9;
-	_center = floor(_tileCount / 2);
-	_playerX = _center;
-	_playerY = _center;
+	_center = (int)floor(_tileCount / 2);
+	_playerX = (float)_center;
+	_playerY = (float)_center;
 
 	// calculate dimensions
-	_mapSize.height = tileData.size();
-	_mapSize.width = tileData[0].size();
+	_mapSize.height = (float)tileData.size();
+	_mapSize.width = (float)tileData[0].size();
 
-	float unitWidth = 594 / _tileCount;
-	float unitHeight = 792 / _tileCount;
-
-	int offsetX = 0;
-	int offsetY = 0;
-
-	if (_mapSize.height < _tileCount) {
-		offsetX = ((_tileCount - _mapSize.height) / 2) * unitHeight;
-	}
-
-	if (_mapSize.width < _tileCount) {
-		offsetY = ((_tileCount - _mapSize.width) / 2) * unitWidth;
-	}
+	float unitWidth = 594.0f / _tileCount;
+	float unitHeight = 792.0f / _tileCount;
 
 	_tileSize = glm::vec2(unitWidth, unitHeight);
 

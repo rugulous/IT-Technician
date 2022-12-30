@@ -36,15 +36,15 @@ Shader& Shader::Use() {
 	return *this;
 }
 
-void Shader::SetInteger(const char* name, const int value) {
+void Shader::SetInteger(const char* name, const int value) const{
 	glUniform1i(glGetUniformLocation(this->_ID, name), value);
 }
 
-void Shader::SetVector3f(const char* name, const glm::vec3& value){
+void Shader::SetVector3f(const char* name, const glm::vec3& value) const{
 	glUniform3f(glGetUniformLocation(this->_ID, name), value.x, value.y, value.z);
 }
 
-void Shader::SetMatrix4(const char* name, const glm::mat4& matrix){
+void Shader::SetMatrix4(const char* name, const glm::mat4& matrix) const{
 	glUniformMatrix4fv(glGetUniformLocation(this->_ID, name), 1, false, glm::value_ptr(matrix));
 }
 

@@ -7,11 +7,11 @@
 
 class GameObject {
 public:
-    GameObject(glm::vec2 pos, glm::vec2 size, std::string texture, glm::vec3 color = glm::vec3(1.0f), glm::vec2 velocity = glm::vec2(0.0f, 0.0f), bool solid = false);
+    GameObject(glm::vec2 pos, glm::vec2 size, const std::string& texture, glm::vec3 color = glm::vec3(1.0f), glm::vec2 velocity = glm::vec2(0.0f, 0.0f), bool solid = false);
 
     bool isSolid;
 
-    virtual void Draw(SpriteRenderer& renderer, glm::vec2 offset = glm::vec2(0.0f));
+    void Draw(SpriteRenderer& renderer, glm::vec2 offset = glm::vec2(0.0f));
 
 private:
     glm::vec2 _position;

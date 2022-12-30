@@ -10,7 +10,6 @@
 
 class HackerState : public IGameState {
 public:
-	HackerState();
 	~HackerState() override;
 
 	void ProcessInput(std::array<bool, 1024>* keys) override;
@@ -27,10 +26,10 @@ private:
 
 	TextRenderer* _renderer;
 
-	void _Init() override;
-	void _addText(std::string text);
+	void Init() override;
+	void _addText(const std::string& text);
 
 	//TODO: move to string helper or something
-	std::vector<std::string> _splitText(std::string text);
-	void _replaceAll(std::string& string, const std::string& from, const std::string& to);
+	std::vector<std::string> _splitText(const std::string& text);
+	void _replaceAll(std::string& string, const std::string& from, const std::string& to) const;
 };

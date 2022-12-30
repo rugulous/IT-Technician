@@ -18,7 +18,7 @@ public:
 	void Render();
 
 private:
-	IGameState* _currentState;
+	IGameState* _currentState = nullptr;
 
 	void _changeState(IGameState *newState);
 };

@@ -25,17 +25,15 @@ enum Direction {
 
 class OverworldState : public IGameState {
 public:
-	OverworldState();
 	~OverworldState() override;
 
+	void Init() override;
 	void ProcessInput(std::array<bool, 1024> *keys) override;
 	int Update(double dt) override;
 	void Render() override;
 	void Release() override;
 
 private:
-	void _Init() override;
-
 	std::vector<std::vector<Tile>> _tiles;
 
 	SpriteRenderer* _renderer;

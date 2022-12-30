@@ -26,6 +26,7 @@ void Game::Init() {
 	sprite->SetMatrix4("projection", projection);
 
 	_currentState = new TestState();
+	_currentState->Init();
 
 	this->isRunning = true;
 }
@@ -42,6 +43,7 @@ void Game::ProcessInput() {
 
 void Game::Update(double dt) {
 	if (_currentState != nullptr) {
+		//TODO: more meaningful return values
 		int res = _currentState->Update(dt);
 
 		if (res == 1) {
@@ -70,6 +72,10 @@ void Game::_changeState(IGameState* newState){
 	if (_currentState != nullptr) {
 		_currentState->Release();
 		delete _currentState;
+	}
+
+	if (newState != nullptr) {
+		newState->Init();
 	}
 
 	_currentState = newState;

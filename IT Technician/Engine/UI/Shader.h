@@ -7,9 +7,9 @@ public:
 	bool Compile(const char* vertexDefinition, const char* fragmentDefinition, const char* geometryDefinition = "");
 	Shader& Use();
 
-	void SetInteger(const char* name, const int value);
-	void SetVector3f(const char* name, const glm::vec3& value);
-	void SetMatrix4(const char* name, const glm::mat4& matrix);
+	void SetInteger(const char* name, const int value) const;
+	void SetVector3f(const char* name, const glm::vec3& value) const;
+	void SetMatrix4(const char* name, const glm::mat4& matrix) const;
 
 	void Clear();
 

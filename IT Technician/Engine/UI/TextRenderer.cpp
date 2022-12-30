@@ -20,12 +20,12 @@ TextRenderer::TextRenderer(unsigned int width, unsigned int height) {
 	glBindBuffer(GL_ARRAY_BUFFER, this->_VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, nullptr, GL_DYNAMIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
 
-bool TextRenderer::Load(std::string fontPath, unsigned int size) {
+bool TextRenderer::Load(const std::string& fontPath, unsigned int size) {
 	this->_characters.clear();
 
 	FT_Library ft;
@@ -81,9 +81,11 @@ bool TextRenderer::Load(std::string fontPath, unsigned int size) {
 
 	FT_Done_Face(face);
 	FT_Done_FreeType(ft);
+
+	return true;
 }
 
-void TextRenderer::RenderText(std::string text, float x, float y, float scale, glm::vec3 colour) {
+void TextRenderer::RenderText(const std::string& text, float x, float y, float scale, glm::vec3 colour) {
 	Shader* shader = ResourceManager::GetShader("text");
 	shader->Use();
 	shader->SetVector3f("textColour", colour);

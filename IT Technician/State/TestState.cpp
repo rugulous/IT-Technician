@@ -2,17 +2,13 @@
 
 #include "../Engine/ResourceManager.h"
 
-TestState::TestState() {
-	this->_Init();
-}
-
 TestState::~TestState() {
 	Release();
 	delete _renderer;
 }
 
 int TestState::Update(double dt) {
-	_rotation += 0.1;
+	_rotation += 0.1f;
 
 	if (_rotation > 360) {
 		return 1;
@@ -30,7 +26,7 @@ void TestState::Release() {
 	ResourceManager::ReleaseTexture("face");
 }
 
-void TestState::_Init() {
+void TestState::Init() {
 	_renderer = new SpriteRenderer();
 	ResourceManager::LoadTexture("face", "Resource/Texture/awesomeface.png", true);
 }

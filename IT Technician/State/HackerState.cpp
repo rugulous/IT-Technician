@@ -5,10 +5,6 @@
 
 #include "../Engine/ResourceManager.h"
 
-HackerState::HackerState() {
-	_Init();
-}
-
 HackerState::~HackerState() {
 	Release();
 	delete _renderer;
@@ -46,11 +42,11 @@ void HackerState::Render() {
 			continue;
 		}
 
-		_renderer->RenderText(_buffer[i], 20, 20 + (i * 52), 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		_renderer->RenderText(_buffer[i], 20, (float)(20 + (i * 52)), 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 }
 
-void HackerState::_Init() {
+void HackerState::Init() {
 	_renderer = new TextRenderer(792, 594);
 	_renderer->Load("Resource/Font/inconsolata.ttf", 16);
 
@@ -60,7 +56,7 @@ void HackerState::_Init() {
 	_addText("HacK3rMAn L337 k0N50l3");
 }
 
-std::vector<std::string> HackerState::_splitText(std::string text){
+std::vector<std::string> HackerState::_splitText(const std::string& text){
 	std::vector<std::string> tokens;
 
 	std::stringstream ss(text);
@@ -73,7 +69,7 @@ std::vector<std::string> HackerState::_splitText(std::string text){
 	return tokens;
 }
 
-void HackerState::_replaceAll(std::string& str, const std::string& from, const std::string& to){
+void HackerState::_replaceAll(std::string& str, const std::string& from, const std::string& to) const{
 	if (from.empty()) {
 		return;
 	}
@@ -85,7 +81,7 @@ void HackerState::_replaceAll(std::string& str, const std::string& from, const s
 	}
 }
 
-void HackerState::_addText(std::string text) {
+void HackerState::_addText(const std::string& text) {
 	if (_buffer.size() < 11) {
 		_buffer.push_back(text);
 		return;

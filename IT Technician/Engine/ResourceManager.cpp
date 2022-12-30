@@ -7,7 +7,7 @@
 std::map<std::string, Shader> ResourceManager::_shaders;
 std::map<std::string, Texture2D> ResourceManager::_textures;
 
-std::string ResourceManager::ReadFile(std::string filePath) {
+std::string ResourceManager::ReadFile(const std::string& filePath) {
 	std::string data = "";
 
 	std::ifstream stream(filePath);
@@ -21,7 +21,7 @@ std::string ResourceManager::ReadFile(std::string filePath) {
 	return data;
 }
 
-Shader* ResourceManager::LoadShader(std::string name, std::string filePath, const char* vertexPath, const char* fragmentPath, const char* geometryPath)
+Shader* ResourceManager::LoadShader(const std::string& name, std::string filePath, const char* vertexPath, const char* fragmentPath, const char* geometryPath)
 {
 	char end = filePath[filePath.length() - 1];
 	if (end != '\\' && end != '/') {
@@ -47,19 +47,19 @@ Shader* ResourceManager::LoadShader(std::string name, std::string filePath, cons
 	return GetShader(name);
 }
 
-Shader* ResourceManager::GetShader(std::string name)
+Shader* ResourceManager::GetShader(const std::string& name)
 {
 	return &_shaders[name];
 }
 
-void ResourceManager::ReleaseShader(std::string name)
+void ResourceManager::ReleaseShader(const std::string& name)
 {
 	Shader* shader = GetShader(name);
 	shader->Clear();
 	_shaders.erase(name);
 }
 
-Texture2D ResourceManager::LoadTexture(std::string name, const char* file, bool alpha)
+Texture2D ResourceManager::LoadTexture(const std::string& name, const char* file, bool alpha)
 {
 	Texture2D texture(alpha);
 	int width;
@@ -74,12 +74,12 @@ Texture2D ResourceManager::LoadTexture(std::string name, const char* file, bool 
 	return texture;
 }
 
-Texture2D ResourceManager::GetTexture(std::string name)
+Texture2D ResourceManager::GetTexture(const std::string& name)
 {
 	return _textures[name];
 }
 
-void ResourceManager::ReleaseTexture(std::string name)
+void ResourceManager::ReleaseTexture(const std::string& name)
 {
 	Texture2D texture = GetTexture(name);
 	texture.Clear();

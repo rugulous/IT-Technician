@@ -10,16 +10,16 @@
 
 class ResourceManager {
 public:
-	static std::string ReadFile(std::string filePath);
+	static std::string ReadFile(const std::string& filePath);
 
-	static Shader* LoadShader(std::string name, std::string filePath, const char* vertexPath = "vertex.sh", 
+	static Shader* LoadShader(const std::string& name, std::string filePath, const char* vertexPath = "vertex.sh", 
 		const char* fragmentPath = "fragment.sh", const char* geometryPath = nullptr);
-	static Shader* GetShader(std::string name);
-	static void ReleaseShader(std::string name);
+	static Shader* GetShader(const std::string&name);
+	static void ReleaseShader(const std::string&name);
 
-	static Texture2D LoadTexture(std::string name, const char* file, bool alpha = false);
-	static Texture2D GetTexture(std::string name);
-	static void ReleaseTexture(std::string name);
+	static Texture2D LoadTexture(const std::string&name, const char* file, bool alpha = false);
+	static Texture2D GetTexture(const std::string&name);
+	static void ReleaseTexture(const std::string&name);
 
 	static std::vector<std::vector<unsigned int>> LoadMap(const char* file);
 

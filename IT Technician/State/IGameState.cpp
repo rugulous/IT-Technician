@@ -1,14 +1,13 @@
 #include "IGameState.h"
 
-//empty method stubs to allow for no implementation
 void IGameState::ProcessInput(std::array<bool, 1024>* keys) {
-
+	//empty method to allow for no implementation in extending classes
 }
 
-void IGameState::Release()
-{
+void IGameState::Release(){
+	//empty method to allow for no implementation in extending classes
 }
 
-void IGameState::_Init()
-{
+void IGameState::Init(){
+	//empty method to allow for no implementation in extending classes
 }
