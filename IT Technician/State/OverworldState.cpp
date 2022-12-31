@@ -127,7 +127,15 @@ void OverworldState::Render() {
 			double xPos = x - _x;
 			double yPos = y - _y;
 
-			glm::vec3 colour = glm::vec3(1.0f);
+			auto colour = (_tiles[y][x].itemType == 1) ? glm::vec3(1.0f, 0.0f, 0.0f) : glm::vec3(0.58f, 0.3f, 0.0f);
+			auto pos = glm::vec2(xPos * _tileSize.x, yPos * _tileSize.y);
+
+			//draw tile first
+			_renderer->DrawSprite(tile, pos, _tileSize, 0.0F, colour);
+
+			if (_tiles[y][x].itemType <= 1) {
+				continue;
+			}
 
 			Texture2D texture;
 			switch (_tiles[y][x].itemType) {
@@ -148,15 +156,10 @@ void OverworldState::Render() {
 				break;
 
 			default:
-				texture = tile;
-				colour = glm::vec3(0.58f, 0.3f, 0.0f);
+				continue;
 			}
 
-			if (_tiles[y][x].itemType == 1) {
-				colour = glm::vec3(1.0f, 0.0f, 0.0f);
-			}
-
-			_renderer->DrawSprite(texture, glm::vec2(xPos * _tileSize.x, yPos * _tileSize.y), _tileSize, 0.0F, colour);
+			_renderer->DrawSprite(texture, pos, _tileSize, 0.0F, glm::vec3(1.0f));
 
 			if (_tiles[y][x].itemType == 3) {
 				_renderer->DrawSprite(laptop, glm::vec2((xPos * _tileSize.x) + (_tileSize.x / 3), yPos * _tileSize.y), _tileSize * glm::vec2(0.4f));
@@ -180,7 +183,7 @@ void OverworldState::Init() {
 	background = Colour(0.58f, 0.3f, 0.0f);
 
 	ResourceManager::LoadTexture("tile", "Resource/Texture/tile.png");
-	
+
 	ResourceManager::LoadTexture("deska", "Resource/Texture/DeskA.png", true);
 	ResourceManager::LoadTexture("deskb", "Resource/Texture/DeskB.png", true);
 	ResourceManager::LoadTexture("deskc", "Resource/Texture/DeskC.png", true);

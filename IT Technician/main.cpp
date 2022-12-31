@@ -63,10 +63,10 @@ int main() {
 
 	while (!glfwWindowShouldClose(window) && game.isRunning)
 	{
+		glfwPollEvents();
 		double currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-		glfwPollEvents();
 
 		game.ProcessInput();
 		game.Update(deltaTime);
