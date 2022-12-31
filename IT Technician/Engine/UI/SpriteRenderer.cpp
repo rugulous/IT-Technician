@@ -12,9 +12,17 @@ SpriteRenderer::~SpriteRenderer() {
 	glDeleteVertexArrays(1, &this->_quadVAO);
 }
 
-void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color, glm::vec4 texturePos)
+void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color, glm::vec4* texturePos)
 {
-    texturePos = texture.CalculateTextureCoords(texturePos.x, texturePos.y, texturePos.z, texturePos.w);
+    glm::vec4 textureCoordinates;
+    if (texturePos == nullptr) {
+        textureCoordinates = texture.GetDefaultCoords();
+    }
+    else {
+        textureCoordinates = *texturePos;
+    }
+
+    texture.CalculateTextureCoords(&textureCoordinates);
 
 	Shader* shader = ResourceManager::GetShader("sprite");
 	shader->Use();
@@ -37,13 +45,13 @@ void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec2 position, glm::vec
 
     float vertices[] = {
         // pos      // tex
-        0.0f, 1.0f, texturePos.x, texturePos.w,
-        1.0f, 0.0f, texturePos.y, texturePos.z,
-        0.0f, 0.0f, texturePos.x, texturePos.z,
+        0.0f, 1.0f, textureCoordinates.x, textureCoordinates.w,
+        1.0f, 0.0f, textureCoordinates.y, textureCoordinates.z,
+        0.0f, 0.0f, textureCoordinates.x, textureCoordinates.z,
 
-        0.0f, 1.0f, texturePos.x, texturePos.w,
-        1.0f, 1.0f, texturePos.y, texturePos.w,
-        1.0f, 0.0f, texturePos.y, texturePos.z
+        0.0f, 1.0f, textureCoordinates.x, textureCoordinates.w,
+        1.0f, 1.0f, textureCoordinates.y, textureCoordinates.w,
+        1.0f, 0.0f, textureCoordinates.y, textureCoordinates.z
     };
 
     glBindBuffer(GL_ARRAY_BUFFER, _VBO);

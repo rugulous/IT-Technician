@@ -44,7 +44,10 @@ glm::vec4 Texture2D::GetDefaultCoords() {
 	return glm::vec4(0, this->_width, 0, this->_height);
 }
 
-glm::vec4 Texture2D::CalculateTextureCoords(float x, float x2, float y, float y2)
+void Texture2D::CalculateTextureCoords(glm::vec4* coords)
 {
-	return glm::vec4(x / this->_width, x2 / this->_width, y / this->_height, y2 / this->_height);
+	coords->x = coords->x / this->_width;
+	coords->y = coords->y / this->_width;
+	coords->z = coords->z / this->_height;
+	coords->w = coords->w / this->_height;
 }

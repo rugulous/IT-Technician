@@ -26,7 +26,7 @@ public:
 	void Clear();
 
 	glm::vec4 GetDefaultCoords();
-	glm::vec4 CalculateTextureCoords(float x, float y, float width, float height);
+	void CalculateTextureCoords(glm::vec4* coords);
 
 private:
 	unsigned int _ID = 0;
