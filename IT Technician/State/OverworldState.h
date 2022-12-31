@@ -55,4 +55,5 @@ private:
 	bool _moveMap = true;
 
 	bool _canMove(int xOffset = 0, int yOffset = 0);
+	void _renderPlayer();
 };

@@ -5,6 +5,8 @@
 
 #include "../Engine/ResourceManager.h"
 
+#define MOVEMENT_SPEED 0.4
+
 OverworldState::~OverworldState() {
 	delete _renderer;
 }
@@ -18,29 +20,40 @@ void OverworldState::ProcessInput(std::array<bool, 1024>* keys) {
 	auto playerX = (int)_playerX;
 	auto playerY = (int)_playerY;
 
-	if ((*keys)[GLFW_KEY_LEFT] && _canMove(-1)) {
-		_isMoving = true;
+	if ((*keys)[GLFW_KEY_LEFT]) {
 		_direction = WEST;
-		_movementTimer = 0.2;
-		_moveMap = (playerX == _center && _x > 0);
+		if (_canMove(-1)) {
+			_isMoving = true;
+			_movementTimer = MOVEMENT_SPEED;
+			_moveMap = (playerX == _center && _x > 0);
+		}
 	}
-	else if ((*keys)[GLFW_KEY_RIGHT] && _canMove(1)) {
-		_isMoving = true;
+	else if ((*keys)[GLFW_KEY_RIGHT]) {
 		_direction = EAST;
-		_movementTimer = 0.2;
-		_moveMap = (playerX == _center && _x < _mapSize.width - _tileCount);
+
+		if (_canMove(1)) {
+			_isMoving = true;
+			_movementTimer = MOVEMENT_SPEED;
+			_moveMap = (playerX == _center && _x < _mapSize.width - _tileCount);
+		}
 	}
-	else if ((*keys)[GLFW_KEY_UP] && _canMove(0, -1)) {
-		_isMoving = true;
+	else if ((*keys)[GLFW_KEY_UP]) {
 		_direction = NORTH;
-		_movementTimer = 0.2;
-		_moveMap = (playerY == _center && _y > 0);
+
+		if (_canMove(0, -1)) {
+			_isMoving = true;
+			_movementTimer = MOVEMENT_SPEED;
+			_moveMap = (playerY == _center && _y > 0);
+		}
 	}
-	else if ((*keys)[GLFW_KEY_DOWN] && _canMove(0, 1)) {
-		_isMoving = true;
+	else if ((*keys)[GLFW_KEY_DOWN]) {
 		_direction = SOUTH;
-		_movementTimer = 0.2;
-		_moveMap = (playerY == _center && _y < _mapSize.height - _tileCount);
+
+		if (_canMove(0, 1)) {
+			_isMoving = true;
+			_movementTimer = MOVEMENT_SPEED;
+			_moveMap = (playerY == _center && _y < _mapSize.height - _tileCount);
+		}
 	}
 }
 
@@ -50,7 +63,7 @@ int OverworldState::Update(double dt) {
 	}
 
 	double update = std::min(dt, _movementTimer);
-	float movementPartial = update * 5;
+	float movementPartial = update * (1 / MOVEMENT_SPEED);
 
 	if (_direction == NORTH) {
 		if (_moveMap) {
@@ -109,9 +122,6 @@ int OverworldState::Update(double dt) {
 
 void OverworldState::Render() {
 	Texture2D tile = ResourceManager::GetTexture("tile");
-	//Texture2D deskA = ResourceManager::GetTexture("deska");
-	//Texture2D deskB = ResourceManager::GetTexture("deskb");
-	//Texture2D deskC = ResourceManager::GetTexture("deskc");
 	Texture2D desk = ResourceManager::GetTexture("desk");
 	Texture2D chair = ResourceManager::GetTexture("chair");
 	Texture2D laptop = ResourceManager::GetTexture("laptop");
@@ -143,7 +153,7 @@ void OverworldState::Render() {
 				colour = glm::vec3(1.0f);
 				texture = floor;
 
-				int offset = ((x + y) % 3) * 32;
+				int offset = ((x % 3) + (y % 3)) * 16;
 
 				textureCoords = glm::vec4(0, 32, offset, offset + 32);
 			}
@@ -189,7 +199,7 @@ void OverworldState::Render() {
 		}
 	}
 
-	_renderer->DrawSprite(tile, glm::vec2(_playerX * _tileSize.x, _playerY * _tileSize.y), _tileSize, 0.0F, glm::vec3(0.0F, 1.0F, 0.0F));
+	_renderPlayer();
 }
 
 void OverworldState::Release() {
@@ -201,7 +211,7 @@ void OverworldState::Release() {
 }
 
 void OverworldState::Init() {
-	background = Colour(0.58f, 0.3f, 0.0f);
+	background = Colour(0.0f, 0.0f, 0.0f); //Colour(0.58f, 0.3f, 0.0f);
 
 	ResourceManager::LoadTexture("tile", "Resource/Texture/tile.png");
 	ResourceManager::LoadTexture("floor", "Resource/Texture/Wood Floor A.png", true);
@@ -210,6 +220,8 @@ void OverworldState::Init() {
 
 	ResourceManager::LoadTexture("chair", "Resource/Texture/chair.png", true);
 	ResourceManager::LoadTexture("laptop", "Resource/Texture/laptop.png", true);
+
+	ResourceManager::LoadTexture("player", "Resource/Texture/player.png", true);
 
 	std::vector<std::vector<unsigned int>> tileData = ResourceManager::LoadMap("Map/Overworld/test.map");
 	_tileCount = 9;
@@ -250,4 +262,32 @@ bool OverworldState::_canMove(int xOffset, int yOffset) {
 	int y = _y + _playerY + yOffset;
 
 	return !_tiles[y][x].isSolid;
+}
+
+void OverworldState::_renderPlayer(){
+	float frameSpeed = MOVEMENT_SPEED / 7.0f;
+
+	int frame = 0;
+	if (_movementTimer > 0) {
+		frame = 8 - (std::round((_movementTimer / frameSpeed)));
+	}
+
+	int xOffset = frame * 64;
+	int yOffset = 512;
+
+	if (_direction == WEST) {
+		yOffset += 64;
+	}
+	else if (_direction == SOUTH) {
+		yOffset += 128;
+	}
+	else if (_direction == EAST) {
+		yOffset += 192;
+	}
+
+	glm::vec4 textureCoords(xOffset, xOffset + 64, yOffset, yOffset + 64);
+	Texture2D player = ResourceManager::GetTexture("player");
+
+	_renderer->DrawSprite(player, glm::vec2((_playerX - 0.5) * _tileSize.x, (_playerY - 1) * _tileSize.y), _tileSize * glm::vec2(2), 0.0F, glm::vec3(1.0f), &textureCoords);
+
 }
