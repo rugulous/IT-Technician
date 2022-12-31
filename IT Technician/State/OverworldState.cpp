@@ -109,9 +109,10 @@ int OverworldState::Update(double dt) {
 
 void OverworldState::Render() {
 	Texture2D tile = ResourceManager::GetTexture("tile");
-	Texture2D deskA = ResourceManager::GetTexture("deska");
-	Texture2D deskB = ResourceManager::GetTexture("deskb");
-	Texture2D deskC = ResourceManager::GetTexture("deskc");
+	//Texture2D deskA = ResourceManager::GetTexture("deska");
+	//Texture2D deskB = ResourceManager::GetTexture("deskb");
+	//Texture2D deskC = ResourceManager::GetTexture("deskc");
+	Texture2D desk = ResourceManager::GetTexture("desk");
 	Texture2D chair = ResourceManager::GetTexture("chair");
 	Texture2D laptop = ResourceManager::GetTexture("laptop");
 
@@ -131,43 +132,48 @@ void OverworldState::Render() {
 			auto pos = glm::vec2(xPos * _tileSize.x, yPos * _tileSize.y);
 
 			//draw tile first
-			_renderer->DrawSprite(tile, pos, _tileSize, 0.0F, colour);
+			_renderer->DrawSprite(tile, pos, _tileSize, 0.0F, colour, tile.GetDefaultCoords());
 
 			if (_tiles[y][x].itemType <= 1) {
 				continue;
 			}
 
 			Texture2D texture;
+			glm::vec4 textureCoords;
 			switch (_tiles[y][x].itemType) {
 			case 2:
-				texture = deskA;
+				texture = desk;
+				textureCoords = glm::vec4(0, 32, 76, 115);
 				break;
 
 			case 3:
-				texture = deskB;
+				texture = desk;
+				textureCoords = glm::vec4(33, 64, 76, 115);
 				break;
 
 			case 4:
-				texture = deskC;
+				texture = desk;
+				textureCoords = glm::vec4(65, 96, 76, 115);
 				break;
 
 			case 5:
 				texture = chair;
+				textureCoords = chair.GetDefaultCoords();
 				break;
 
 			default:
 				continue;
 			}
 
-			_renderer->DrawSprite(texture, pos, _tileSize, 0.0F, glm::vec3(1.0f));
+			_renderer->DrawSprite(texture, pos, _tileSize, 0.0F, glm::vec3(1.0f), textureCoords);
 
 			if (_tiles[y][x].itemType == 3) {
-				_renderer->DrawSprite(laptop, glm::vec2((xPos * _tileSize.x) + (_tileSize.x / 3), yPos * _tileSize.y), _tileSize * glm::vec2(0.4f));
+				_renderer->DrawSprite(laptop, glm::vec2((xPos * _tileSize.x) + (_tileSize.x / 3), yPos * _tileSize.y), _tileSize * glm::vec2(0.4f), 0.0f, glm::vec3(1.0), laptop.GetDefaultCoords());
 			}
 		}
 	}
 
-	_renderer->DrawSprite(tile, glm::vec2(_playerX * _tileSize.x, _playerY * _tileSize.y), _tileSize, 0.0F, glm::vec3(0.0F, 1.0F, 0.0F));
+	_renderer->DrawSprite(tile, glm::vec2(_playerX * _tileSize.x, _playerY * _tileSize.y), _tileSize, 0.0F, glm::vec3(0.0F, 1.0F, 0.0F), tile.GetDefaultCoords());
 }
 
 void OverworldState::Release() {
@@ -184,9 +190,11 @@ void OverworldState::Init() {
 
 	ResourceManager::LoadTexture("tile", "Resource/Texture/tile.png");
 
-	ResourceManager::LoadTexture("deska", "Resource/Texture/DeskA.png", true);
-	ResourceManager::LoadTexture("deskb", "Resource/Texture/DeskB.png", true);
-	ResourceManager::LoadTexture("deskc", "Resource/Texture/DeskC.png", true);
+	//ResourceManager::LoadTexture("deska", "Resource/Texture/DeskA.png", true);
+	//ResourceManager::LoadTexture("deskb", "Resource/Texture/DeskB.png", true);
+	//ResourceManager::LoadTexture("deskc", "Resource/Texture/DeskC.png", true);
+
+	ResourceManager::LoadTexture("desk", "Resource/Texture/Desk, Ornate.png", true);
 
 	ResourceManager::LoadTexture("chair", "Resource/Texture/chair.png", true);
 	ResourceManager::LoadTexture("laptop", "Resource/Texture/laptop.png", true);

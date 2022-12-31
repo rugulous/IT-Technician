@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 struct TextureFormat {
 	unsigned int format;
 	unsigned int imageFormat;
@@ -22,6 +24,9 @@ public:
 	void Load(unsigned int width, unsigned int height, unsigned const char* data);
 	void Bind() const;
 	void Clear();
+
+	glm::vec4 GetDefaultCoords();
+	glm::vec4 CalculateTextureCoords(float x, float y, float width, float height);
 
 private:
 	unsigned int _ID = 0;

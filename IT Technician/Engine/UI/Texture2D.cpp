@@ -39,3 +39,12 @@ void Texture2D::Bind() const
 void Texture2D::Clear() {
 	glDeleteTextures(1, &this->_ID);
 }
+
+glm::vec4 Texture2D::GetDefaultCoords() {
+	return glm::vec4(0, this->_width, 0, this->_height);
+}
+
+glm::vec4 Texture2D::CalculateTextureCoords(float x, float x2, float y, float y2)
+{
+	return glm::vec4(x / this->_width, x2 / this->_width, y / this->_height, y2 / this->_height);
+}

@@ -12,8 +12,10 @@ SpriteRenderer::~SpriteRenderer() {
 	glDeleteVertexArrays(1, &this->_quadVAO);
 }
 
-void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color)
+void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color, glm::vec4 texturePos)
 {
+    texturePos = texture.CalculateTextureCoords(texturePos.x, texturePos.y, texturePos.z, texturePos.w);
+
 	Shader* shader = ResourceManager::GetShader("sprite");
 	shader->Use();
 
@@ -33,13 +35,26 @@ void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec2 position, glm::vec
     glActiveTexture(GL_TEXTURE0);
     texture.Bind();
 
+    float vertices[] = {
+        // pos      // tex
+        0.0f, 1.0f, texturePos.x, texturePos.w,
+        1.0f, 0.0f, texturePos.y, texturePos.z,
+        0.0f, 0.0f, texturePos.x, texturePos.z,
+
+        0.0f, 1.0f, texturePos.x, texturePos.w,
+        1.0f, 1.0f, texturePos.y, texturePos.w,
+        1.0f, 0.0f, texturePos.y, texturePos.z
+    };
+
+    glBindBuffer(GL_ARRAY_BUFFER, _VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+
     glBindVertexArray(this->_quadVAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
 }
 
 void SpriteRenderer::_InitRenderData() {
-    unsigned int VBO;
     float vertices[] = {
         // pos      // tex
         0.0f, 1.0f, 0.0f, 1.0f,
@@ -52,10 +67,10 @@ void SpriteRenderer::_InitRenderData() {
     };
 
     glGenVertexArrays(1, &this->_quadVAO);
-    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &_VBO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, _VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
     glBindVertexArray(this->_quadVAO);
     glEnableVertexAttribArray(0);
