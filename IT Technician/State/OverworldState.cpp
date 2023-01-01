@@ -63,9 +63,9 @@ void OverworldState::ProcessInput(std::array<bool, 1024>* keys) {
 	}
 }
 
-int OverworldState::Update(double dt) {
+StateOutcome OverworldState::Update(double dt) {
 	if (!_isMoving) {
-		return 0;
+		return StateOutcome();
 	}
 
 	double update = std::min(dt, _movementTimer);
@@ -118,12 +118,23 @@ int OverworldState::Update(double dt) {
 			_playerY = round(_playerY);
 		}
 
+		if (_outcomes[_y + _playerY][_x + _playerX] != nullptr) {
+			_isMoving = true;
+			_movementTimer = MOVEMENT_SPEED;
+
+			if (_direction == NORTH || _direction == SOUTH) {
+				_direction = EAST;
+			}
+
+			return *_outcomes[_y + _playerY][_x + _playerX];
+		}
+
 		/*if (_tiles[_y + _playerY][_x + _playerX].itemType == 5) {
 			return 2;
 		}*/
 	}
 
-	return 0;
+	return StateOutcome();
 }
 
 void OverworldState::Render() {
@@ -149,7 +160,11 @@ void OverworldState::Render() {
 				_renderer->DrawSprite(floor, pos, _tileSize, 0.0F, glm::vec3(1.0f), &floorData.coords);
 			}
 
-			for (int l = 0; l < _levelsBelow; l++) {
+			for (int l = 0; l < _levels.size(); l++) {
+				if (l >= _levelsBelow && y >= _y + _playerY) {
+					continue;
+				}
+
 				int type = _levels[l][y][x];
 				if (type == 0 || type >= _objectTextures.size()) {
 					continue;
@@ -166,6 +181,10 @@ void OverworldState::Render() {
 	_renderPlayer();
 
 	for (int y = minY; y < minY + _tileCount + 2; y++) {
+			if (y < _y + _playerY) {
+				continue;
+			}
+
 		for (int x = minX; x < minX + _tileCount + 2; x++) {
 			if (x >= _mapSize.width || y >= _mapSize.height) {
 				continue;
@@ -202,11 +221,9 @@ void OverworldState::Release() {
 
 void OverworldState::Init() {
 	background = Colour(0.0f, 0.0f, 0.0f); //Colour(0.58f, 0.3f, 0.0f);
-
-	ResourceManager::LoadTexture("player", "Resource/Texture/player.png", true);
+	_renderer = new SpriteRenderer();
 
 	_loadMap("Map/Overworld/new.map");
-	_renderer = new SpriteRenderer();
 }
 
 bool OverworldState::_canMove(int xOffset, int yOffset) {
@@ -251,13 +268,13 @@ void OverworldState::_renderPlayer() {
 
 void OverworldState::_loadMap(const std::string& file) {
 	Release();
-	_objectTextures.clear();
 	_levels.clear();
 	_solid.clear();
 
 	_isMoving = false;
 	_movementTimer = 0;
 
+	ResourceManager::LoadTexture("player", "Resource/Texture/player.png", true);
 	_currentMap = file;
 
 	std::vector<std::string> data = Split(ResourceManager::ReadFile(file), '\n');
@@ -311,15 +328,18 @@ void OverworldState::_loadMap(const std::string& file) {
 	for (int y = 0; y < _mapSize.height; y++) {
 		std::vector<bool> row;
 		std::vector<int> _objRow;
+		std::vector<StateOutcome*> special;
 
 		for (unsigned int x = 0; x < _mapSize.width; ++x)
 		{
 			row.push_back(false);
 			_objRow.push_back(0);
+			special.push_back(nullptr);
 		}
 
 		this->_solid.push_back(row);
 		_obj.push_back(_objRow);
+		this->_outcomes.push_back(special);
 	}
 
 	for (int i = 0; i < totalLevels; i++) {
@@ -369,13 +389,38 @@ void OverworldState::_loadMap(const std::string& file) {
 		int h = atoi(parts[4].c_str());
 		int type = atoi(parts[5].c_str());
 		bool solid = atoi(parts[6].c_str());
+		StateOutcome* outcome = nullptr;
+
+		if (parts.size() > 7) {
+			//ooooh we have a special location!
+			if (parts[7] == "L" && parts.size() > 8) {
+				//getting here loads state parts[8]
+				outcome = new StateOutcome {
+					LOAD_STATE,
+					false,
+					atoi(parts[8].c_str())
+				};
+			}
+		}
 
 		for (int _height = 0; _height < h; _height++) {
+			if (y + _height >= _mapSize.height) {
+				break;
+			}
+
 			for (int _width = 0; _width < w; _width++) {
+				if (x + _width >= _mapSize.width) {
+					break;
+				}
+
 				_levels[level][y + _height][x + _width] = type;
 
 				if (solid) {
 					_solid[y + _height][x + _width] = true;
+				}
+
+				if (outcome != nullptr) {
+					_outcomes[y + _height][x + _width] = outcome;
 				}
 			}
 		}

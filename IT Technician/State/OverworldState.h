@@ -34,13 +34,14 @@ public:
 
 	void Init() override;
 	void ProcessInput(std::array<bool, 1024> *keys) override;
-	int Update(double dt) override;
+	StateOutcome Update(double dt) override;
 	void Render() override;
 	void Release() override;
 
 private:
 	std::vector<std::vector<bool>> _solid;
 	std::vector<std::vector<std::vector<int>>> _levels;
+	std::vector<std::vector<StateOutcome*>> _outcomes;
 	std::vector<Tex> _objectTextures;
 	int _floorIndex = 0;
 	int _levelsBelow = 0;

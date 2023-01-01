@@ -44,17 +44,24 @@ void Game::ProcessInput() {
 void Game::Update(double dt) {
 	if (_currentState != nullptr) {
 		//TODO: more meaningful return values
-		int res = _currentState->Update(dt);
+		StateOutcome res = _currentState->Update(dt);
 
-		if (res == 1) {
-			_changeState(new OverworldState(), true);
+		if (res.type == CONTINUE) {
+			return;
 		}
-		else if (res == 2) {
-			_changeState(new HackerState());
-		}
-		else if (res == 3) {
+
+		if (res.type == RESTORE) {
 			_restoreState();
+			return;
 		}
+
+		if (res.nextState == 1) {
+			_changeState(new OverworldState(), res.destroy);
+		}
+		else if (res.nextState == 2) {
+			_changeState(new HackerState(), res.destroy);
+		}
+
 	}
 }
 

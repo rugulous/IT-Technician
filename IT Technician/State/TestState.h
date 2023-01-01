@@ -8,7 +8,7 @@ public:
 	~TestState() override;
 
 	void Init() override;
-	int Update(double dt) override;
+	StateOutcome Update(double dt) override;
 	void Render() override;
 	void Release() override;
 

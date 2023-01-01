@@ -13,7 +13,7 @@ public:
 	~HackerState() override;
 
 	void ProcessInput(std::array<bool, 1024>* keys) override;
-	int Update(double dt) override;
+	StateOutcome Update(double dt) override;
 	void Render() override;
 
 private:

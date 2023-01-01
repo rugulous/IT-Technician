@@ -29,12 +29,14 @@ void HackerState::ProcessInput(std::array<bool, 1024>* keys) {
 	}
 }
 
-int HackerState::Update(double dt) {
+StateOutcome HackerState::Update(double dt) {
 	if (_progress > _fullText.size()) {
-		return 3;
+		return {
+			RESTORE
+		};
 	}
 
-	return 0;
+	return StateOutcome();
 }
 
 void HackerState::Render() {

@@ -7,14 +7,18 @@ TestState::~TestState() {
 	delete _renderer;
 }
 
-int TestState::Update(double dt) {
+StateOutcome TestState::Update(double dt) {
 	_rotation += 0.1f;
 
 	if (_rotation > 360) {
-		return 1;
+		return {
+			LOAD_STATE,
+			true,
+			1
+		};
 	}
 
-	return 0;
+	return StateOutcome();
 }
 
 void TestState::Render() {
