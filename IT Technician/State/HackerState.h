@@ -27,9 +27,5 @@ private:
 	TextRenderer* _renderer;
 
 	void Init() override;
-	void _addText(const std::string& text);
-
-	//TODO: move to string helper or something
-	std::vector<std::string> _splitText(const std::string& text);
-	void _replaceAll(std::string& string, const std::string& from, const std::string& to) const;
+	void _addText(std::string& text);
 };

@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "../Engine/ResourceManager.h"
+#include "../Engine/Util/String.h"
 
 HackerState::~HackerState() {
 	Release();
@@ -50,38 +51,16 @@ void HackerState::Init() {
 	_renderer = new TextRenderer(792, 594);
 	_renderer->Load("Resource/Font/inconsolata.ttf", 16);
 
-	_fullText = _splitText(ResourceManager::ReadFile("Resource/String/hacker.txt"));
+	_fullText = Split(ResourceManager::ReadFile("Resource/String/hacker.txt"), '\n');
 	_progress = 0;
 
-	_addText("HacK3rMAn L337 k0N50l3");
+	std::string startText("HacK3rMAn L337 k0N50l3");
+	_addText(startText);
 }
 
-std::vector<std::string> HackerState::_splitText(const std::string& text){
-	std::vector<std::string> tokens;
+void HackerState::_addText(std::string& text) {
+	ReplaceAll(text, "\t", "    ");
 
-	std::stringstream ss(text);
-	std::string token;
-	while (std::getline(ss, token, '\n')) {
-		_replaceAll(token, "\t", "    ");
-		tokens.push_back(token);
-	}
-
-	return tokens;
-}
-
-void HackerState::_replaceAll(std::string& str, const std::string& from, const std::string& to) const{
-	if (from.empty()) {
-		return;
-	}
-
-	size_t start_pos = 0;
-	while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
-		str.replace(start_pos, from.length(), to);
-		start_pos += to.length();
-	}
-}
-
-void HackerState::_addText(const std::string& text) {
 	if (_buffer.size() < 11) {
 		_buffer.push_back(text);
 		return;

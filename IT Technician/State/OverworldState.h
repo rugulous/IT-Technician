@@ -23,6 +23,11 @@ enum Direction {
 	WEST
 };
 
+struct Tex {
+	std::string texture;
+	glm::vec4 coords;
+};
+
 class OverworldState : public IGameState {
 public:
 	~OverworldState() override;
@@ -34,7 +39,12 @@ public:
 	void Release() override;
 
 private:
-	std::vector<std::vector<Tile>> _tiles;
+	std::vector<std::vector<bool>> _solid;
+	std::vector<std::vector<std::vector<int>>> _levels;
+	std::vector<Tex> _objectTextures;
+	int _floorIndex = 0;
+	int _levelsBelow = 0;
+	std::string _currentMap = "";
 
 	SpriteRenderer* _renderer;
 
@@ -53,6 +63,8 @@ private:
 	Direction _direction = SOUTH;
 	double _movementTimer = 0;
 	bool _moveMap = true;
+
+	void _loadMap(const std::string& map);
 
 	bool _canMove(int xOffset = 0, int yOffset = 0);
 	void _renderPlayer();
