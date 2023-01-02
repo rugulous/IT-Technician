@@ -57,6 +57,10 @@ void OverworldState::ProcessInput(std::array<bool, 1024>* keys) {
 			_moveMap = (playerY == _center && _y < _mapSize.height - _tileCount);
 		}
 	}
+	else if (_labours <= 0 && (*keys)[GLFW_KEY_Z]) {
+		_attackTimer = MOVEMENT_SPEED;
+		_isMoving = true;
+	}
 
 	if ((*keys)[GLFW_KEY_R]) {
 		_loadMap(_currentMap);
@@ -68,9 +72,11 @@ StateOutcome OverworldState::Update(double dt) {
 		return StateOutcome();
 	}
 
-	double update = std::min(dt, _movementTimer);
+	double update = std::min(dt, (_attackTimer > 0) ? _attackTimer : _movementTimer);
+
 	float movementPartial = update * (1 / MOVEMENT_SPEED);
 
+	if(_movementTimer > 0){
 	if (_direction == NORTH) {
 		if (_moveMap) {
 			_y -= movementPartial;
@@ -104,34 +110,50 @@ StateOutcome OverworldState::Update(double dt) {
 		}
 	}
 
-	_movementTimer -= update;
-	if (_movementTimer <= 0) {
-		_isMoving = false;
-		_movementTimer = 0;
+		_movementTimer -= update;
 
-		if (_moveMap) {
-			_x = round(_x);
-			_y = round(_y);
-		}
-		else {
-			_playerX = round(_playerX);
-			_playerY = round(_playerY);
-		}
+		if (_movementTimer <= 0) {
+			_isMoving = false;
+			_movementTimer = 0;
 
-		if (_outcomes[_y + _playerY][_x + _playerX] != nullptr) {
-			_isMoving = true;
-			_movementTimer = MOVEMENT_SPEED;
-
-			if (_direction == NORTH || _direction == SOUTH) {
-				_direction = EAST;
+			if (_moveMap) {
+				_x = round(_x);
+				_y = round(_y);
+			}
+			else {
+				_playerX = round(_playerX);
+				_playerY = round(_playerY);
 			}
 
-			return *_outcomes[_y + _playerY][_x + _playerX];
-		}
+			if (_outcomes[_y + _playerY][_x + _playerX] != nullptr) {
+				_isMoving = true;
+				_movementTimer = MOVEMENT_SPEED;
 
-		/*if (_tiles[_y + _playerY][_x + _playerX].itemType == 5) {
-			return 2;
-		}*/
+				if (_direction == NORTH || _direction == SOUTH) {
+					_direction = EAST;
+				}
+
+				_labours--;
+
+				if (_labours <= 0) {
+					ResourceManager::ReleaseTexture("player");
+					ResourceManager::LoadTexture("player", "Resource/Texture/player-rage.png", true);
+				}
+
+				StateOutcome outcome = *_outcomes[_y + _playerY][_x + _playerX];
+				delete _outcomes[_y + _playerY][_x + _playerX];
+				_outcomes[_y + _playerY][_x + _playerX] = nullptr;
+				return outcome;
+			}
+		}
+	}
+	else if (_attackTimer > 0) {
+		_attackTimer -= update;
+
+		if (_attackTimer <= 0) {
+			_isMoving = false;
+			_attackTimer = 0;
+		}
 	}
 
 	return StateOutcome();
@@ -145,6 +167,8 @@ void OverworldState::Render() {
 	int minX = std::max(0, (int)_x - 1);
 	int minY = std::max(0, (int)_y - 1);
 
+	auto colour = (_labours <= 0) ? glm::vec3(0.6f, 0.2f, 0.2f) : glm::vec3(1.0f);
+
 	for (int y = minY; y < minY + _tileCount + 2; y++) {
 		for (int x = minX; x < minX + _tileCount + 2; x++) {
 			if (x >= _mapSize.width || y >= _mapSize.height) {
@@ -157,7 +181,7 @@ void OverworldState::Render() {
 
 			//draw tile first
 			if (x > 0 && x < _mapSize.width - 1 && y > 0 && y < _mapSize.height - 1) {
-				_renderer->DrawSprite(floor, pos, _tileSize, 0.0F, glm::vec3(1.0f), &floorData.coords);
+				_renderer->DrawSprite(floor, pos, _tileSize, 0.0F, colour, &floorData.coords);
 			}
 
 			for (int l = 0; l < _levels.size(); l++) {
@@ -173,12 +197,12 @@ void OverworldState::Render() {
 				Tex textureDetails = _objectTextures[type];
 				Texture2D texture = ResourceManager::GetTexture(textureDetails.texture);
 
-				_renderer->DrawSprite(texture, pos, _tileSize, 0.0F, glm::vec3(1.0f), &textureDetails.coords);
+				_renderer->DrawSprite(texture, pos, _tileSize, 0.0F, colour, &textureDetails.coords);
 			}
 		}
 	}
 
-	_renderPlayer();
+	_renderPlayer(colour);
 
 	for (int y = minY; y < minY + _tileCount + 2; y++) {
 			if (y < _y + _playerY) {
@@ -203,7 +227,7 @@ void OverworldState::Render() {
 				Tex textureDetails = _objectTextures[type];
 				Texture2D texture = ResourceManager::GetTexture(textureDetails.texture);
 
-				_renderer->DrawSprite(texture, pos, _tileSize, 0.0F, glm::vec3(1.0f), &textureDetails.coords);
+				_renderer->DrawSprite(texture, pos, _tileSize, 0.0F, colour, &textureDetails.coords);
 			}
 		}
 	}
@@ -237,16 +261,19 @@ bool OverworldState::_canMove(int xOffset, int yOffset) {
 	return !_solid[y][x];
 }
 
-void OverworldState::_renderPlayer() {
-	float frameSpeed = MOVEMENT_SPEED / 7.0f;
+void OverworldState::_renderPlayer(glm::vec3 colour) {
+	float frameSpeed = (_attackTimer > 0) ? MOVEMENT_SPEED / 5.0f : MOVEMENT_SPEED / 7.0f;
 
 	int frame = 0;
 	if (_movementTimer > 0) {
 		frame = 8 - (std::round((_movementTimer / frameSpeed)));
 	}
+	else if (_attackTimer > 0) {
+		frame = (std::round((_attackTimer / frameSpeed)));
+	}
 
 	int xOffset = frame * 64;
-	int yOffset = 513;
+	int yOffset = (_attackTimer > 0) ? 769 : 513;
 
 	if (_direction == WEST) {
 		yOffset += 64;
@@ -261,7 +288,7 @@ void OverworldState::_renderPlayer() {
 	glm::vec4 textureCoords(xOffset, xOffset + 64, yOffset, yOffset + 64);
 	Texture2D player = ResourceManager::GetTexture("player");
 
-	_renderer->DrawSprite(player, glm::vec2((_playerX - 0.5) * _tileSize.x, (_playerY - 1) * _tileSize.y), _tileSize * glm::vec2(2), 0.0F, glm::vec3(1.0f), &textureCoords);
+	_renderer->DrawSprite(player, glm::vec2((_playerX - 0.5) * _tileSize.x, (_playerY - 1) * _tileSize.y), _tileSize * glm::vec2(2), 0.0F, colour, &textureCoords);
 
 }
 
@@ -270,6 +297,7 @@ void OverworldState::_loadMap(const std::string& file) {
 	Release();
 	_levels.clear();
 	_solid.clear();
+	_labours = 0;
 
 	_isMoving = false;
 	_movementTimer = 0;
@@ -400,6 +428,7 @@ void OverworldState::_loadMap(const std::string& file) {
 					false,
 					atoi(parts[8].c_str())
 				};
+				_labours++;
 			}
 		}
 

@@ -39,6 +39,8 @@ public:
 	void Release() override;
 
 private:
+	int _labours = 0;
+
 	std::vector<std::vector<bool>> _solid;
 	std::vector<std::vector<std::vector<int>>> _levels;
 	std::vector<std::vector<StateOutcome*>> _outcomes;
@@ -63,10 +65,11 @@ private:
 	bool _isMoving = false;
 	Direction _direction = SOUTH;
 	double _movementTimer = 0;
+	double _attackTimer = 0;
 	bool _moveMap = true;
 
 	void _loadMap(const std::string& map);
 
 	bool _canMove(int xOffset = 0, int yOffset = 0);
-	void _renderPlayer();
+	void _renderPlayer(glm::vec3 colour);
 };
