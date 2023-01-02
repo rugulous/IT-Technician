@@ -1,5 +1,6 @@
 #include "OverworldState.h"
 
+#include <irrKlang/irrKlang.h>
 #include <GLFW/glfw3.h>
 #include <algorithm>
 #include <iostream>
@@ -8,6 +9,8 @@
 #include "../Engine/Util/String.h"
 
 #define MOVEMENT_SPEED 0.4
+
+irrklang::ISoundEngine* soundEngine = irrklang::createIrrKlangDevice();
 
 OverworldState::~OverworldState() {
 	delete _renderer;
@@ -68,6 +71,31 @@ void OverworldState::ProcessInput(std::array<bool, 1024>* keys) {
 }
 
 StateOutcome OverworldState::Update(double dt) {
+	if (_returning) {
+		_isMoving = true;
+		_movementTimer = MOVEMENT_SPEED;
+
+		if (_direction == NORTH || _direction == SOUTH) {
+			_direction = EAST;
+		}
+
+		_labours--;
+
+		if (_labours <= 0) {
+			ResourceManager::ReleaseTexture("player");
+			ResourceManager::LoadTexture("player", "Resource/Texture/player-rage.png", true);
+
+			soundEngine->play2D("Resource/Audio/DOOM.mp3", true);
+			soundEngine->play2D("Resource/Audio/rage.wav");
+		}
+
+		delete _outcomes[_y + _playerY][_x + _playerX];
+		_outcomes[_y + _playerY][_x + _playerX] = nullptr;
+
+		_returning = false;
+	}
+
+
 	if (!_isMoving) {
 		return StateOutcome();
 	}
@@ -126,23 +154,9 @@ StateOutcome OverworldState::Update(double dt) {
 			}
 
 			if (_outcomes[_y + _playerY][_x + _playerX] != nullptr) {
-				_isMoving = true;
-				_movementTimer = MOVEMENT_SPEED;
-
-				if (_direction == NORTH || _direction == SOUTH) {
-					_direction = EAST;
-				}
-
-				_labours--;
-
-				if (_labours <= 0) {
-					ResourceManager::ReleaseTexture("player");
-					ResourceManager::LoadTexture("player", "Resource/Texture/player-rage.png", true);
-				}
+				_returning = true;
 
 				StateOutcome outcome = *_outcomes[_y + _playerY][_x + _playerX];
-				delete _outcomes[_y + _playerY][_x + _playerX];
-				_outcomes[_y + _playerY][_x + _playerX] = nullptr;
 				return outcome;
 			}
 		}
@@ -247,6 +261,10 @@ void OverworldState::Init() {
 	background = Colour(0.0f, 0.0f, 0.0f); //Colour(0.58f, 0.3f, 0.0f);
 	_renderer = new SpriteRenderer();
 
+	soundEngine->play2D("Resource/Audio/DOOM.mp3");
+	soundEngine->play2D("Resource/Audio/rage.wav");
+	soundEngine->stopAllSounds();
+
 	_loadMap("Map/Overworld/new.map");
 }
 
@@ -298,6 +316,8 @@ void OverworldState::_loadMap(const std::string& file) {
 	_levels.clear();
 	_solid.clear();
 	_labours = 0;
+
+	soundEngine->stopAllSounds();
 
 	_isMoving = false;
 	_movementTimer = 0;

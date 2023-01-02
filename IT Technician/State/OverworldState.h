@@ -63,6 +63,7 @@ private:
 	float _playerY;
 
 	bool _isMoving = false;
+	bool _returning = false;
 	Direction _direction = SOUTH;
 	double _movementTimer = 0;
 	double _attackTimer = 0;
