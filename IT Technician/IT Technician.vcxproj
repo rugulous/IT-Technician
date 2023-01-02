@@ -141,6 +141,7 @@
     <ClCompile Include="State\HackerState.cpp" />
     <ClCompile Include="State\IGameState.cpp" />
     <ClCompile Include="State\OverworldState.cpp" />
+    <ClCompile Include="State\PipeState.cpp" />
     <ClCompile Include="State\TestState.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="Engine\UI\Texture2D.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="State\HackerState.h" />
     <ClInclude Include="State\IGameState.h" />
     <ClInclude Include="State\OverworldState.h" />
+    <ClInclude Include="State\PipeState.h" />
     <ClInclude Include="State\TestState.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Engine\UI\Texture2D.h" />

@@ -9,6 +9,7 @@
 #include "State/TestState.h"
 #include "State/OverworldState.h"
 #include "State/HackerState.h"
+#include "State/PipeState.h"
 
 Game::~Game() {
 	if (_currentState != nullptr) {
@@ -43,7 +44,6 @@ void Game::ProcessInput() {
 
 void Game::Update(double dt) {
 	if (_currentState != nullptr) {
-		//TODO: more meaningful return values
 		StateOutcome res = _currentState->Update(dt);
 
 		if (res.type == CONTINUE) {
@@ -60,6 +60,9 @@ void Game::Update(double dt) {
 		}
 		else if (res.nextState == 2) {
 			_changeState(new HackerState(), res.destroy);
+		}
+		else if (res.nextState == 3) {
+			_changeState(new PipeState(), res.destroy);
 		}
 
 	}
