@@ -42,5 +42,8 @@ private:
 	double _inputDelay = 0;
 	bool _rotating = false;
 
+	bool _solved = false;
+	bool _done = false;
+
 	bool _checkForPath();
 };

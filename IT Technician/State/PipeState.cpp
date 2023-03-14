@@ -118,11 +118,19 @@ StateOutcome PipeState::Update(double dt){
         _rotating = false;
 
         if (_checkForPath()) {
+            _solved = true;
+        }
+    }
+
+    if (_solved) {
+        if (_done) {
             return {
                 RESTORE,
                 true
             };
         }
+
+        _done = true;
     }
 
     return StateOutcome();
