@@ -13,14 +13,14 @@ Texture2D::Texture2D(bool alpha) {
 	this->_filter.min = GL_LINEAR;
 	this->_filter.max = GL_LINEAR;
 
-	glGenTextures(1, &this->_ID);
+	glGenTextures(1, &this->ID);
 }
 
 void Texture2D::Load(unsigned int width, unsigned int height, unsigned const char* data) {
 	_width = width;
 	_height = height;
 
-	glBindTexture(GL_TEXTURE_2D, this->_ID);
+	glBindTexture(GL_TEXTURE_2D, this->ID);
 	glTexImage2D(GL_TEXTURE_2D, 0, this->_format.format, _width, _height, 0, this->_format.imageFormat, GL_UNSIGNED_BYTE, data);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, this->_wrap.x);
@@ -33,11 +33,11 @@ void Texture2D::Load(unsigned int width, unsigned int height, unsigned const cha
 
 void Texture2D::Bind() const
 {
-	glBindTexture(GL_TEXTURE_2D, this->_ID);
+	glBindTexture(GL_TEXTURE_2D, this->ID);
 }
 
 void Texture2D::Clear() {
-	glDeleteTextures(1, &this->_ID);
+	glDeleteTextures(1, &this->ID);
 }
 
 glm::vec4 Texture2D::GetDefaultCoords() {

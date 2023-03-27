@@ -8,6 +8,8 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Util/String.h"
 
+#include "../Constants/Screen.h"
+
 #define MOVEMENT_SPEED 0.4
 
 irrklang::ISoundEngine* soundEngine = irrklang::createIrrKlangDevice();
@@ -340,8 +342,8 @@ void OverworldState::_loadMap(const std::string& file) {
 	_playerX = (float)_center;
 	_playerY = (float)_center;
 
-	float unitWidth = 594.0f / _tileCount;
-	float unitHeight = 792.0f / _tileCount;
+	float unitWidth = SCREEN_WIDTH / _tileCount;
+	float unitHeight = SCREEN_HEIGHT / _tileCount;
 
 	_tileSize = glm::vec2(unitWidth, unitHeight);
 

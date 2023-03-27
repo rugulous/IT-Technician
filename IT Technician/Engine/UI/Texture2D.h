@@ -28,8 +28,8 @@ public:
 	glm::vec4 GetDefaultCoords();
 	void CalculateTextureCoords(glm::vec4* coords);
 
+	unsigned int ID = 0;
 private:
-	unsigned int _ID = 0;
 	
 	unsigned int _width = 0;
 	unsigned int _height = 0;

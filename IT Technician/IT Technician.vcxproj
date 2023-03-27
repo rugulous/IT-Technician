@@ -134,6 +134,7 @@
   <ItemGroup>
     <ClCompile Include="Engine\Entity\GameObject.cpp" />
     <ClCompile Include="Engine\UI\Colour.cpp" />
+    <ClCompile Include="Engine\UI\PostProcessor.cpp" />
     <ClCompile Include="Engine\UI\Shader.cpp" />
     <ClCompile Include="Engine\UI\SpriteRenderer.cpp" />
     <ClCompile Include="Engine\UI\TextRenderer.cpp" />
@@ -151,8 +152,10 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Constants\Screen.h" />
     <ClInclude Include="Engine\Entity\GameObject.h" />
     <ClInclude Include="Engine\UI\Colour.h" />
+    <ClInclude Include="Engine\UI\PostProcessor.h" />
     <ClInclude Include="Engine\UI\Shader.h" />
     <ClInclude Include="Engine\UI\SpriteRenderer.h" />
     <ClInclude Include="Engine\UI\TextRenderer.h" />
@@ -170,6 +173,8 @@
   <ItemGroup>
     <None Include="Map\Overworld\new.map" />
     <None Include="Map\Overworld\test.map" />
+    <None Include="Shader\Colour\fragment.sh" />
+    <None Include="Shader\Colour\vertex.sh" />
     <None Include="Shader\Sprite\fragment.sh">
       <DeploymentContent>true</DeploymentContent>
     </None>

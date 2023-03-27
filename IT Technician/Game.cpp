@@ -11,6 +11,9 @@
 #include "State/HackerState.h"
 #include "State/PipeState.h"
 
+Game::Game(int width, int height) : _width(width), _height(height) {
+}
+
 Game::~Game() {
 	if (_currentState != nullptr) {
 		delete _currentState;
@@ -19,8 +22,9 @@ Game::~Game() {
 
 void Game::Init() {
 	ResourceManager::LoadShader("sprite", "Shader/Sprite/");
+	ResourceManager::LoadShader("postprocess", "Shader/Colour/");
 
-	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(594), static_cast<float>(792), 0.0f, -1.0f, 1.0f);
+	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(_width), static_cast<float>(_height), 0.0f, -1.0f, 1.0f);
 	Shader* sprite = ResourceManager::GetShader("sprite");
 	sprite->Use();
 	sprite->SetInteger("sprite", 0);
@@ -28,6 +32,8 @@ void Game::Init() {
 
 	_currentState = new TestState();
 	_currentState->Init();
+
+	_processor = new PostProcessor(_width, _height);
 
 	this->isRunning = true;
 }
@@ -69,19 +75,24 @@ void Game::Update(double dt) {
 }
 
 void Game::Render() {
-	if (_currentState != nullptr) {
-		glClearColor(_currentState->background.red, _currentState->background.green, _currentState->background.blue, 1.0f);
+	if (_currentState == nullptr) {
+		glClearColor(0, 0, 0, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		_currentState->Render();
 		return;
 	}
 
-	glClearColor(0, 0, 0, 1.0f);
+	_processor->BeginRender();
+	glClearColor(_currentState->background.red, _currentState->background.green, _currentState->background.blue, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	_currentState->Render();
+	_processor->EndRender();
+
+	_processor->Render(0);
 }
 
-void Game::_changeState(IGameState* newState, bool destroy){
+void Game::_changeState(IGameState* newState, bool destroy) {
 	if (_currentState != nullptr) {
 		if (destroy) {
 			_currentState->Release();

@@ -60,6 +60,15 @@
     <ClCompile Include="State\HackerState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Util\String.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="State\PipeState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\UI\PostProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\ResourceManager.h">
@@ -101,6 +110,18 @@
     <ClInclude Include="State\HackerState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Util\String.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="State\PipeState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\UI\PostProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants\Screen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\Sprite\vertex.sh" />
@@ -108,6 +129,9 @@
     <None Include="Map\Overworld\test.map" />
     <None Include="Shader\Text\vertex.sh" />
     <None Include="Shader\Text\fragment.sh" />
+    <None Include="Map\Overworld\new.map" />
+    <None Include="Shader\Colour\fragment.sh" />
+    <None Include="Shader\Colour\vertex.sh" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resource\Texture\awesomeface.png">

@@ -5,10 +5,9 @@
 #include "Game.h"
 #include "Engine/ResourceManager.h"
 
-const int SCREEN_WIDTH = 792;
-const int SCREEN_HEIGHT = 594;
+#include "Constants/Screen.h"
 
-Game game;
+Game game = Game(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 void keyCallback(GLFWwindow*, int key, int, int action, int)
 {
